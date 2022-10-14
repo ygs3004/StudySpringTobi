@@ -1,46 +1,45 @@
-package springbook.user.dao;
+package springbook.user.dao.Before;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import springbook.user.dao.ConnectionMaker;
+import springbook.user.dao.DaoFactory;
 import springbook.user.domain.User;
 
-import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class UserDao {
+public class UserDao1_33Before {
 
+    private static UserDao1_33Before INSTANCE;
     private ConnectionMaker connectionMaker;
-    private DataSource dataSource;
-
-    private static UserDao INSTANCE;
     private Connection c;
     private User user;
 
-    public UserDao() {
+    private UserDao1_33Before() {
+        /*
+        DaoFactory daoFactory = new DaoFactory();
+        this.connectionMaker = daoFactory.connectionMaker(); // 주입이 아닌 요청, 의존관계 검색
+        */
+
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+        this.connectionMaker = context.getBean("connectionMaker", ConnectionMaker.class);
 
     }
 
-    public UserDao(ConnectionMaker connectionMaker){
+    public UserDao1_33Before(ConnectionMaker connectionMaker){
         this.connectionMaker=connectionMaker;
     }
 
-    public static synchronized UserDao getInstance(){
-        if(INSTANCE == null) INSTANCE = new UserDao();
+    public static synchronized UserDao1_33Before getInstance(){
+        if(INSTANCE == null) INSTANCE = new UserDao1_33Before();
         return INSTANCE;
-    }
-
-
-    public void setConnectionMaker(ConnectionMaker connectionMaker) { //수정자 주입(Setter)
-        this.connectionMaker = connectionMaker;
-    }
-
-
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
     }
 
     public void add(User user) throws ClassNotFoundException, SQLException{
 
-       Connection c = dataSource.getConnection();
+       this.c= connectionMaker.makeConnection();
 
         PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?,?,?)");
         ps.setString(1, user.getId());
@@ -55,7 +54,7 @@ public class UserDao {
 
     public User get(String id) throws ClassNotFoundException, SQLException{
 
-        Connection c = dataSource.getConnection();
+        this.c= connectionMaker.makeConnection();
 
         PreparedStatement ps = c.prepareStatement("select * from users where id= ?");
         ps.setString(1, id);;

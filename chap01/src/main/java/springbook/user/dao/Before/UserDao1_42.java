@@ -1,46 +1,44 @@
-package springbook.user.dao;
+package springbook.user.dao.Before;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import springbook.user.dao.ConnectionMaker;
 import springbook.user.domain.User;
 
-import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class UserDao {
+public class UserDao1_42 {
 
+    private static UserDao1_42 INSTANCE;
     private ConnectionMaker connectionMaker;
-    private DataSource dataSource;
-
-    private static UserDao INSTANCE;
     private Connection c;
     private User user;
 
-    public UserDao() {
+    public UserDao1_42() {
+        /* 생성자 주입시
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+        this.connectionMaker = context.getBean("connectionMaker", ConnectionMaker.class);
+        */
 
     }
 
-    public UserDao(ConnectionMaker connectionMaker){
+    public UserDao1_42(ConnectionMaker connectionMaker){
         this.connectionMaker=connectionMaker;
     }
 
-    public static synchronized UserDao getInstance(){
-        if(INSTANCE == null) INSTANCE = new UserDao();
+    public static synchronized UserDao1_42 getInstance(){
+        if(INSTANCE == null) INSTANCE = new UserDao1_42();
         return INSTANCE;
     }
-
 
     public void setConnectionMaker(ConnectionMaker connectionMaker) { //수정자 주입(Setter)
         this.connectionMaker = connectionMaker;
     }
 
-
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
-
     public void add(User user) throws ClassNotFoundException, SQLException{
 
-       Connection c = dataSource.getConnection();
+       this.c= connectionMaker.makeConnection();
 
         PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?,?,?)");
         ps.setString(1, user.getId());
@@ -55,7 +53,7 @@ public class UserDao {
 
     public User get(String id) throws ClassNotFoundException, SQLException{
 
-        Connection c = dataSource.getConnection();
+        this.c= connectionMaker.makeConnection();
 
         PreparedStatement ps = c.prepareStatement("select * from users where id= ?");
         ps.setString(1, id);;

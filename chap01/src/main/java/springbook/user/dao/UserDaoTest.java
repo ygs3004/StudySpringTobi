@@ -1,7 +1,7 @@
 package springbook.user.dao;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
 import springbook.user.domain.User;
 
 import java.sql.SQLException;
@@ -15,7 +15,12 @@ public class UserDaoTest {
         UserDao dao = new UserDao(connectionMaker);
         */
         // UserDao dao = new DaoFactoryProb().userDao();
-        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+
+        // 자바 클래스 사용
+        // ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+
+        //ApplicationCaontext.xml 사용
+        ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
 
         UserDao dao = context.getBean("userDao", UserDao.class);
 
@@ -33,6 +38,16 @@ public class UserDaoTest {
         System.out.println(user.getPassword());
 
         System.out.println(user2.getId() + " 조회 성공");
+
+        if(!user.getName().equals(user2.getName())){
+            System.out.println("테스트 실패(name)");
+        }
+        else if(!user.getPassword().equals(user2.getPassword())){
+            System.out.println("테스트 실패(password");
+        }
+        else{
+            System.out.println("조회 테스트 성공");
+        }
 
     }
 }
