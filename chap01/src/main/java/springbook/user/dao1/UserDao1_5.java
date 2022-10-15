@@ -1,4 +1,4 @@
-package springbook.user.problemdao;
+package springbook.user.dao1;
 
 import springbook.user.domain.User;
 

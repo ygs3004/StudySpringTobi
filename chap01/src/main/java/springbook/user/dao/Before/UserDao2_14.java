@@ -1,29 +1,33 @@
-package springbook.user.dao;
+package springbook.user.dao.Before;
 
-import org.springframework.dao.EmptyResultDataAccessException;
+import springbook.user.dao.ConnectionMaker;
 import springbook.user.domain.User;
 
 import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class UserDao {
+public class UserDao2_14 {
 
     private ConnectionMaker connectionMaker;
     private DataSource dataSource;
 
-    private static UserDao INSTANCE;
+    private static UserDao2_14 INSTANCE;
     private Connection c;
+    private User user;
 
-    public UserDao() {
+    public UserDao2_14() {
 
     }
 
-    public UserDao(ConnectionMaker connectionMaker){
+    public UserDao2_14(ConnectionMaker connectionMaker){
         this.connectionMaker=connectionMaker;
     }
 
-    public static synchronized UserDao getInstance(){
-        if(INSTANCE == null) INSTANCE = new UserDao();
+    public static synchronized UserDao2_14 getInstance(){
+        if(INSTANCE == null) INSTANCE = new UserDao2_14();
         return INSTANCE;
     }
 
@@ -60,21 +64,17 @@ public class UserDao {
         ps.setString(1, id);;
 
         ResultSet rs = ps.executeQuery();
-
-        User user = null; // rs.next가 false면 EmptyResultDataAccessException
-        if(rs.next()){
-            user = new User();
-            user.setId((rs.getString("id")));
-            user.setName((rs.getString("name")));
-            user.setPassword((rs.getString("password")));
-        }
+        rs.next();
+        this.user = new User();
+        this.user.setId((rs.getString("id")));
+        this.user.setName((rs.getString("name")));
+        this.user.setPassword((rs.getString("password")));
 
         rs.close();
         ps.close();
         c.close();
 
-        if(user == null) throw new EmptyResultDataAccessException(1);
-        return user;
+        return this.user;
     }
 
     public void deleteAll() throws SQLException{

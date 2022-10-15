@@ -1,15 +1,15 @@
-package springbook.user.problemdao;
+package springbook.user.dao1;
 
 import springbook.user.domain.User;
 
 import java.sql.*;
 
-public abstract class UserDao {
+//get connection 분리, 중복코드 메소드 추출
+public class UserDao1_4 {
 
     public void add(User user) throws ClassNotFoundException, SQLException{
-        Class.forName("oracle.jdbc.driver.OracleDriver");
-        Connection c= DriverManager.getConnection(
-                "jdbc:oracle:thin:@localhost:1521:XE","tobi","tobi");
+
+        Connection c= getConnection();
 
         PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?,?,?)");
         ps.setString(1, user.getId());
@@ -23,9 +23,8 @@ public abstract class UserDao {
     }
 
     public User get(String id) throws ClassNotFoundException, SQLException{
-        Class.forName("oracle.jdbc.driver.OracleDriver");
-        Connection c= DriverManager.getConnection(
-                "jdbc:oracle:thin:@localhost:1521:XE","tobi","tobi");
+
+        Connection c= getConnection();
 
         PreparedStatement ps = c.prepareStatement("select * from users where id= ?");
         ps.setString(1, id);;
@@ -43,10 +42,10 @@ public abstract class UserDao {
 
         return user;
     }
-/*
+
     public static void main(String[] args) throws ClassNotFoundException, SQLException{
 
-        UserDao dao = new UserDao();
+        UserDao1_4 dao = new UserDao1_4();
 
         User user = new User();
         user.setId("Buff");
@@ -64,7 +63,13 @@ public abstract class UserDao {
         System.out.println(user2.getId() + " 조회 성공");
 
     }
-*/
 
-    public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
+    private Connection getConnection() throws ClassNotFoundException, SQLException{
+        Class.forName("oracle.jdbc.driver.OracleDriver");
+        Connection c= DriverManager.getConnection(
+                "jdbc:oracle:thin:@localhost:1521:XE","tobi","tobi");
+
+        return c;
+    }
+
 }

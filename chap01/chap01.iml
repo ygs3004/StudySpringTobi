@@ -29,5 +29,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:3.0.7.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-jdbc:3.0.7.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-tx:3.0.7.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: junit:junit:4.7" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-test:3.0.7.RELEASE" level="project" />
   </component>
 </module>
