@@ -1,16 +1,21 @@
 package springbook.user.dao;
 
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import springbook.user.domain.User;
 
 import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class UserDao {
 
     private ConnectionMaker connectionMaker;
+    private JdbcTemplate jdbcTemplate;
     private DataSource dataSource;
-
     private static UserDao INSTANCE;
     private Connection c;
 
@@ -18,51 +23,42 @@ public class UserDao {
 
     }
 
-    public UserDao(ConnectionMaker connectionMaker){
-        this.connectionMaker=connectionMaker;
+    public UserDao(ConnectionMaker connectionMaker) {
+        this.connectionMaker = connectionMaker;
     }
 
-    public static synchronized UserDao getInstance(){
-        if(INSTANCE == null) INSTANCE = new UserDao();
+    public static synchronized UserDao getInstance() {
+        if (INSTANCE == null) INSTANCE = new UserDao();
         return INSTANCE;
     }
-
 
     public void setConnectionMaker(ConnectionMaker connectionMaker) { //수정자 주입(Setter)
         this.connectionMaker = connectionMaker;
     }
 
-
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
+    public void setDataSource(DataSource dataSource) { // 수정자 메소드이면서 JdbcTemplate에 대한 생성, DI 작업을 동시에 수행한다.
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+        this.dataSource = dataSource; // JdbcContext를 적용하지 않은 메소드를 위해 저장
     }
 
-    public void add(User user) throws SQLException{
 
-       Connection c = dataSource.getConnection();
+    public void add(final User user) throws SQLException {
 
-        PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?,?,?)");
-        ps.setString(1, user.getId());
-        ps.setString(2, user.getName());
-        ps.setString(3, user.getPassword());
-
-        ps.executeUpdate();
-
-        ps.close();
-        c.close();
+        this.jdbcTemplate.update("insert into users(id, name, password)values(?,?,?)", user.getId(), user.getName(), user.getPassword() );
     }
 
-    public User get(String id) throws SQLException{
+    public User get(String id) throws SQLException {
 
         Connection c = dataSource.getConnection();
 
         PreparedStatement ps = c.prepareStatement("select * from users where id= ?");
-        ps.setString(1, id);;
+        ps.setString(1, id);
+        ;
 
         ResultSet rs = ps.executeQuery();
 
         User user = null; // rs.next가 false면 EmptyResultDataAccessException
-        if(rs.next()){
+        if (rs.next()) {
             user = new User();
             user.setId((rs.getString("id")));
             user.setName((rs.getString("name")));
@@ -73,30 +69,59 @@ public class UserDao {
         ps.close();
         c.close();
 
-        if(user == null) throw new EmptyResultDataAccessException(1);
+        if (user == null) throw new EmptyResultDataAccessException(1);
         return user;
     }
 
-    public void deleteAll() throws SQLException{
-        Connection c = dataSource.getConnection();
+    public void deleteAll() throws SQLException {
 
-        PreparedStatement ps = c.prepareStatement("delete from users");
-        ps.execute();
-        ps.close();
-        c.close();
+        this.jdbcTemplate.update("delete from users");
+
+        /*
+        this.jdbcTemplate.update(
+                new PreparedStatementCreator() {
+                    @Override
+                    public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+                        return con.prepareStatement("delete from users");
+                    }
+                }
+        );
+        */
     }
 
-    public int getCount() throws SQLException{
-        Connection c = dataSource.getConnection();
-        PreparedStatement ps = c.prepareStatement("select count(*) from users");
-        ResultSet rs = ps.executeQuery();
-        rs.next();
-        int count = rs.getInt(1);
+    public int getCount() throws SQLException {
 
-        rs.close();
-        ps.close();
-        c.close();
-        return count;
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            c = dataSource.getConnection();
+            ps = c.prepareStatement("select count(*) from users");
+            rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt(1);
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                }
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                }
+            }
+            if (c != null) {
+                try {
+                    c.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
     }
-
 }

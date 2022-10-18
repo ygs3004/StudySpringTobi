@@ -5,11 +5,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class CountingDaoFactory {
-
-    @Bean
-    public UserDao userDao(){
-        return new UserDao(connectionMaker());
-    }
+//
+//    @Bean
+//    public UserDao userDao(){
+//        return new UserDao(connectionMaker());
+//    }
 
     public AccountDao accountDao(){
         return new AccountDao(connectionMaker());
