@@ -1,4 +1,4 @@
-package springbook.user.dao;
+package springbook.user.dao.Before;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -6,13 +6,13 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import springbook.user.dao.JdbcContext;
+import springbook.user.dao.UserDao;
 import springbook.user.domain.User;
 
-import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -22,7 +22,7 @@ import static org.junit.Assert.assertThat;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/test-applicationContext.xml")
 @DirtiesContext
-public class UserDaoTest {
+public class UserDaoTest3_58 {
 
     @Autowired
     private UserDao dao;
