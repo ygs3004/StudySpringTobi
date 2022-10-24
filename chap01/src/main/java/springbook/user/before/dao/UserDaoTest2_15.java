@@ -1,3 +1,4 @@
+/*
 package springbook.user.before.dao;
 
 import org.junit.Test;
@@ -35,12 +36,14 @@ public class UserDaoTest2_15 {
         dao.add(user1);
         dao.add(user2);
         assertThat(dao.getCount(), is(2));
-        /*
+        */
+/*
         User user = new User();
         user.setId("ygs3004");
         user.setName("내아이디");
         user.setPassword("내비번");
-        */
+        *//*
+
 
         User userget1 = dao.get(user1.getId());
         assertThat(userget1.getName(), is(user1.getName()));
@@ -87,4 +90,4 @@ public class UserDaoTest2_15 {
         dao.get("unknow_id"); // 예외 발생
     }
 
-}
+}*/

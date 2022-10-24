@@ -1,4 +1,5 @@
-package springbook.user.dao;
+/*
+package springbook.user.dao.Before;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -7,12 +8,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
-import org.springframework.jdbc.support.SQLExceptionTranslator;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import springbook.user.domain.Level;
+import springbook.user.dao.UserDao;
 import springbook.user.domain.User;
 
 import javax.sql.DataSource;
@@ -24,8 +23,8 @@ import static org.junit.Assert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/test-applicationContext.xml")
-@DirtiesContext // 테스트 케이스마다 UserDaoTest객체를 새로 생성
-public class UserDaoTest {
+@DirtiesContext
+public class UserDaoTest4_24 {
 
     @Autowired
     private UserDao dao;
@@ -37,19 +36,21 @@ public class UserDaoTest {
     DataSource dataSource;
 
     public static void main(String[] args) {
-        JUnitCore.main("springbook.user.dao.UserDaoTest", "springbook.user.dao.UserServiceTest", "springbook.user.dao.UserTest");
+        JUnitCore.main("springbook.user.dao.UserDaoTest");
     }
 
     @Before
     public void setUp(){
-        this.user1 = new User("ygs3004", "윤건수", "비밀!", Level.BASIC, 1, 0, "ygs3004@naver.com");
-        this.user2 = new User("winter", "겨울", "추워", Level.SILVER, 55, 10, "abc2@nave2r.com");
-        this.user3 = new User("faker", "페이커", "1557", Level.GOLD, 100, 44, "abc3@nave2r.com");
-        /*
+        this.user1 = new User("ygs3004", "윤건수", "비밀!");
+        this.user2 = new User("winter", "겨울", "추워");
+        this.user3 = new User("faker", "페이커", "1557");
+        */
+/*
         dao = new UserDao();
         DataSource dataSource = new SingleConnectionDataSource("jdbc:oracle:thin:@localhost:1521:XE", "tobiTest", "tobi", true);
         dao.setDataSource(dataSource);
-        */
+        *//*
+
     }
 
     @Test
@@ -64,10 +65,12 @@ public class UserDaoTest {
         assertThat(dao.getCount(), is(2));
 
         User userget1 = dao.get(user1.getId());
-        checkSameUser(userget1, user1);
+        assertThat(userget1.getName(), is(user1.getName()));
+        assertThat(userget1.getPassword(), is(user1.getPassword()));
 
         User userget2 = dao.get(user2.getId());
-        checkSameUser(userget2, user2);
+        assertThat(userget2.getName(), is(user2.getName()));
+        assertThat(userget2.getPassword(), is(user2.getPassword()));
 
     }
 
@@ -128,10 +131,6 @@ public class UserDaoTest {
         assertThat(user1.getId(), is(user2.getId()));
         assertThat(user1.getName(), is(user2.getName()));
         assertThat(user1.getPassword(), is(user2.getPassword()));
-        // 새로운 필드(level, login, recommend)를 검증
-        assertThat(user1.getLevel(), is(user2.getLevel()));
-        assertThat(user1.getLogin(), is(user2.getLogin()));
-        assertThat(user1.getRecommend(), is(user2.getRecommend()));
     }
 
     //@Test // (expected = DataAccessException.class)
@@ -145,45 +144,4 @@ public class UserDaoTest {
 
     }
 
-    @Test
-    public void sqlExceptionTranslate(){
-        dao.deleteAll();
-
-        try{
-            dao.add(user1);
-            dao.add(user1);
-
-        }catch (DuplicateKeyException ex){
-            SQLException sqlEx = (SQLException)ex.getRootCause();
-            SQLExceptionTranslator set = // 코드를 이용한 SQLException
-                    new SQLErrorCodeSQLExceptionTranslator(this.dataSource); // data 종류( Orcale, mysql, ....)
-
-            assertThat(set.translate(null, null, sqlEx), // null => 에러 메시지를 만들때 사용하는 정보
-                    is(DuplicateKeyException.class));
-        }
-
-    }
-
-    @Test
-    public void update() {
-        dao.deleteAll();
-
-        dao.add(user1); // 수정할 사용자
-        dao.add(user2); // 수정하지 않을 사용자
-
-        user1.setName("윤건수");
-        user1.setPassword("비밀!");
-        user1.setLevel(Level.BASIC);
-        user1.setLogin(1);
-        user1.setRecommend(0);
-
-        dao.update(user1);
-
-        User user1update = dao.get(user1.getId());
-        checkSameUser(user1, user1update);
-
-        User user2same = dao.get(user2.getId());
-        checkSameUser(user2, user2same);
-    }
-
-}
+}*/

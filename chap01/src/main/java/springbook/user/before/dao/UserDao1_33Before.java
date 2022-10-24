@@ -1,3 +1,4 @@
+/*
 package springbook.user.before.dao;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -17,10 +18,12 @@ public class UserDao1_33Before {
     private User user;
 
     private UserDao1_33Before() {
-        /*
+        */
+/*
         DaoFactory daoFactory = new DaoFactory();
         this.connectionMaker = daoFactory.connectionMaker(); // 주입이 아닌 요청, 의존관계 검색
-        */
+        *//*
+
 
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
         this.connectionMaker = context.getBean("connectionMaker", ConnectionMaker.class);
@@ -72,4 +75,4 @@ public class UserDao1_33Before {
         return this.user;
     }
 
-}
+}*/

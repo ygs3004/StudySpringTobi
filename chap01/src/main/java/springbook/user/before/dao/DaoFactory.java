@@ -1,3 +1,4 @@
+/*
 package springbook.user.before.dao;
 
 import org.springframework.context.annotation.Bean;
@@ -43,4 +44,4 @@ public class DaoFactory {
         dataSource.setPassword("tobi");
         return dataSource;
     }
-}
+}*/
