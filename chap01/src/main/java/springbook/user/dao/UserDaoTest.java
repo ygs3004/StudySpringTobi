@@ -37,7 +37,7 @@ public class UserDaoTest {
     DataSource dataSource;
 
     public static void main(String[] args) {
-        JUnitCore.main("springbook.user.dao.UserDaoTest", "springbook.user.dao.UserServiceTest", "springbook.user.dao.UserTest");
+        JUnitCore.main("springbook.user.dao.UserDaoTest", "springbook.user.service.UserServiceTest", "springbook.user.dao.UserTest");
     }
 
     @Before

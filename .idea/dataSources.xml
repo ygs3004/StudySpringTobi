@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="@localhost" uuid="9b1a6544-907d-4c43-9b58-a515f3ed05d4">
+    <data-source source="LOCAL" name="@localhost" uuid="03eb55b4-f72c-4ef9-ad6c-11e98573d775">
       <driver-ref>oracle.19</driver-ref>
       <synchronize>true</synchronize>
       <auto-commit>false</auto-commit>
@@ -9,7 +9,7 @@
       <jdbc-url>jdbc:oracle:thin:@localhost:1521:XE</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="tobi" uuid="81307d21-cc6f-46c1-bb04-e8523da233d6">
+    <data-source source="LOCAL" name="tobitest" uuid="ed660d7c-0869-45aa-b0f1-324633f6ca3c">
       <driver-ref>oracle.19</driver-ref>
       <synchronize>true</synchronize>
       <auto-commit>false</auto-commit>
