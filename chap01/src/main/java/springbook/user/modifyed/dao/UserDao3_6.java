@@ -1,4 +1,4 @@
-package springbook.user.before.dao;
+package springbook.user.modifyed.dao;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import springbook.user.dao.ConnectionMaker;
@@ -10,24 +10,24 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserDao3_3 {
+public class UserDao3_6 {
 
     private ConnectionMaker connectionMaker;
     private DataSource dataSource;
 
-    private static UserDao3_3 INSTANCE;
+    private static UserDao3_6 INSTANCE;
     private Connection c;
 
-    public UserDao3_3() {
+    public UserDao3_6() {
 
     }
 
-    public UserDao3_3(ConnectionMaker connectionMaker){
+    public UserDao3_6(ConnectionMaker connectionMaker){
         this.connectionMaker=connectionMaker;
     }
 
-    public static synchronized UserDao3_3 getInstance(){
-        if(INSTANCE == null) INSTANCE = new UserDao3_3();
+    public static synchronized UserDao3_6 getInstance(){
+        if(INSTANCE == null) INSTANCE = new UserDao3_6();
         return INSTANCE;
     }
 
@@ -109,16 +109,39 @@ public class UserDao3_3 {
     }
 
     public int getCount() throws SQLException{
-        Connection c = dataSource.getConnection();
-        PreparedStatement ps = c.prepareStatement("select count(*) from users");
-        ResultSet rs = ps.executeQuery();
-        rs.next();
-        int count = rs.getInt(1);
 
-        rs.close();
-        ps.close();
-        c.close();
-        return count;
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try{
+            c = dataSource.getConnection();
+            ps = c.prepareStatement("select count(*) from users");
+            rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt(1);
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if( rs != null){
+                try{
+                   rs.close();
+                }catch (SQLException e){
+                }
+            }
+            if( ps != null){
+                try{
+                    ps.close();
+                }catch (SQLException e){
+                }
+            }
+            if( c != null){
+                try{
+                    c.close();
+                }catch (SQLException e){
+                }
+            }
+        }
     }
 
 }

@@ -1,7 +1,9 @@
-package springbook.user.before.dao;
+package springbook.user.modifyed.dao;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import springbook.user.dao.ConnectionMaker;
+import springbook.user.dao.JdbcContext;
+import springbook.user.dao.StatementStrategy;
 import springbook.user.domain.User;
 
 import javax.sql.DataSource;
@@ -10,24 +12,24 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-//public abstract class UserDao3_9 {
-public class UserDao3_9 {
+public class UserDao3_25 {
 
     private ConnectionMaker connectionMaker;
+    private JdbcContext jdbcContext;
     private DataSource dataSource;
-    private static UserDao3_9 INSTANCE;
+    private static UserDao3_25 INSTANCE;
     private Connection c;
 
-    public UserDao3_9() {
+    public UserDao3_25() {
 
     }
 
-    public UserDao3_9(ConnectionMaker connectionMaker) {
+    public UserDao3_25(ConnectionMaker connectionMaker) {
         this.connectionMaker = connectionMaker;
     }
 
-    public static synchronized UserDao3_9 getInstance() {
-        // if(INSTANCE == null) INSTANCE = new UserDao3_9();
+    public static synchronized UserDao3_25 getInstance() {
+        if (INSTANCE == null) INSTANCE = new UserDao3_25();
         return INSTANCE;
     }
 
@@ -36,24 +38,29 @@ public class UserDao3_9 {
         this.connectionMaker = connectionMaker;
     }
 
-
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    public void add(User user) throws SQLException {
+    public void setJdbcContext(JdbcContext jdbcContext) {
+        this.jdbcContext = jdbcContext;
+    }
 
-        Connection c = dataSource.getConnection();
+    public void add(final User user) throws SQLException {
 
-        PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?,?,?)");
-        ps.setString(1, user.getId());
-        ps.setString(2, user.getName());
-        ps.setString(3, user.getPassword());
+        this.jdbcContext.workWithStatementStrategy(
+            new StatementStrategy() {
+                @Override
+                public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+                    PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?,?,?)");
+                    ps.setString(1, user.getId());
+                    ps.setString(2, user.getName());
+                    ps.setString(3, user.getPassword());
+                    return ps;
+                }
+            }
+        );
 
-        ps.executeUpdate();
-
-        ps.close();
-        c.close();
     }
 
     public User get(String id) throws SQLException {
@@ -84,29 +91,15 @@ public class UserDao3_9 {
 
     public void deleteAll() throws SQLException {
 
-        Connection c = null;
-        PreparedStatement ps = null;
-
-        try {
-            c = dataSource.getConnection();
-            //ps = makeStatement(c);
-            //ps.executeUpdate();
-        } catch (SQLException e) {
-            throw e;
-        } finally {
-            /*if( ps != null){
-                try{
-                    ps.close();
-                }catch (SQLException e){
-                }
-            }*/
-            if (c != null) {
-                try {
-                    c.close();
-                } catch (SQLException e) {
+        this.jdbcContext.workWithStatementStrategy(
+            new StatementStrategy() {
+                @Override
+                public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+                    return c.prepareStatement("delete from users");
                 }
             }
-        }
+        );
+
     }
 
     public int getCount() throws SQLException {
@@ -144,7 +137,4 @@ public class UserDao3_9 {
             }
         }
     }
-
-    // abstract protected PreparedStatement makeStatement(Connection c) throws SQLException;
-
 }

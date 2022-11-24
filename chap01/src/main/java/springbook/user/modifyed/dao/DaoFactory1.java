@@ -1,20 +1,14 @@
-package springbook.user.before.dao;
+package springbook.user.modifyed.dao;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import springbook.user.dao.*;
 
-@Configuration
-public class DaoFactory1_34 {
+public class DaoFactory1 {
 
     ConnectionMaker connectionMaker = new DConnectionMaker();
-/*
 
-    @Bean
-    public UserDao userDao(){
-        return new UserDao(connectionMaker());
+    public UserDao3_22 userDao(){
+        return new UserDao3_22(connectionMaker());
     }
-*/
 
     public AccountDao accountDao(){
         return new AccountDao(connectionMaker());
@@ -24,7 +18,6 @@ public class DaoFactory1_34 {
         return new MessageDao(connectionMaker());
     }
 
-    @Bean
     public ConnectionMaker connectionMaker(){
         return new DConnectionMaker();
     }

@@ -1,4 +1,4 @@
-package springbook.user.before.dao;
+package springbook.user.modifyed.dao;
 
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;

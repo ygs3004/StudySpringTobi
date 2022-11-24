@@ -1,5 +1,6 @@
-package springbook.user.before.dao;
+package springbook.user.modifyed.dao;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import springbook.user.dao.ConnectionMaker;
 import springbook.user.domain.User;
 
@@ -9,25 +10,24 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserDao2_14 {
+public class UserDao3_3 {
 
     private ConnectionMaker connectionMaker;
     private DataSource dataSource;
 
-    private static UserDao2_14 INSTANCE;
+    private static UserDao3_3 INSTANCE;
     private Connection c;
-    private User user;
 
-    public UserDao2_14() {
+    public UserDao3_3() {
 
     }
 
-    public UserDao2_14(ConnectionMaker connectionMaker){
+    public UserDao3_3(ConnectionMaker connectionMaker){
         this.connectionMaker=connectionMaker;
     }
 
-    public static synchronized UserDao2_14 getInstance(){
-        if(INSTANCE == null) INSTANCE = new UserDao2_14();
+    public static synchronized UserDao3_3 getInstance(){
+        if(INSTANCE == null) INSTANCE = new UserDao3_3();
         return INSTANCE;
     }
 
@@ -64,26 +64,48 @@ public class UserDao2_14 {
         ps.setString(1, id);;
 
         ResultSet rs = ps.executeQuery();
-        rs.next();
-        this.user = new User();
-        this.user.setId((rs.getString("id")));
-        this.user.setName((rs.getString("name")));
-        this.user.setPassword((rs.getString("password")));
+
+        User user = null; // rs.next가 false면 EmptyResultDataAccessException
+        if(rs.next()){
+            user = new User();
+            user.setId((rs.getString("id")));
+            user.setName((rs.getString("name")));
+            user.setPassword((rs.getString("password")));
+        }
 
         rs.close();
         ps.close();
         c.close();
 
-        return this.user;
+        if(user == null) throw new EmptyResultDataAccessException(1);
+        return user;
     }
 
     public void deleteAll() throws SQLException{
-        Connection c = dataSource.getConnection();
 
-        PreparedStatement ps = c.prepareStatement("delete from users");
-        ps.execute();
-        ps.close();
-        c.close();
+        Connection c = null;
+        PreparedStatement ps = null;
+
+        try{
+            c = dataSource.getConnection();
+            ps = c.prepareStatement("delete from users");
+            ps.executeUpdate();
+        } catch (SQLException e){
+            throw e;
+        } finally {
+            if( ps != null){
+                try{
+                    ps.close();
+                }catch (SQLException e){
+                }
+            }
+            if( c != null){
+                try{
+                    c.close();
+                }catch (SQLException e){
+                }
+            }
+        }
     }
 
     public int getCount() throws SQLException{

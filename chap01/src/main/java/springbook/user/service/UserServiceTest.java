@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static springbook.user.service.UserServiceImpl.MIN_LOGOUT_FOR_SILVER;
@@ -36,7 +35,6 @@ public class UserServiceTest {
     UserService userService;
     @Autowired
     UserServiceImpl userServiceImpl;
-
     @Autowired
     UserDao userDao;
     @Autowired
@@ -60,26 +58,31 @@ public class UserServiceTest {
     @Test
     public void upgradeLevels() throws Exception{
 
-        userDao.deleteAll();
-        for(User user:users) {
-            userDao.add(user);
-        }
+        // 고립된 테스트 대상 오브젝트 직접 생성
+        UserServiceImpl userServiceImpl = new UserServiceImpl();
+
+        MockUserDao mockUserDao = new MockUserDao(this.users);
+        userServiceImpl.setUserDao(mockUserDao); // 목 오브젝트로 만든 userDao 직접 DI
 
         MockMailSender mockMailSender = new MockMailSender();
         userServiceImpl.setMailSender(mockMailSender);
 
-        userService.upgradeLevels();
+        userServiceImpl.upgradeLevels();
 
-        checkLevelUpgraded(users.get(0), false);
-        checkLevelUpgraded(users.get(1), true);
-        checkLevelUpgraded(users.get(2), false);
-        checkLevelUpgraded(users.get(3), true);
-        checkLevelUpgraded(users.get(4), false);
+        List<User> updated = mockUserDao.getUpdated(); // MockUserDao로 업데이트 결과 가져오기
+        assertThat(updated.size(), is(2));
+        checkUserAndLevel(updated.get(0), "bkeria", Level.SILVER);
+        checkUserAndLevel(updated.get(1), "dgumayusi", Level.GOLD);
 
         List<String> request = mockMailSender.getRequest();
         assertThat(request.size(), is(2));
         assertThat(request.get(0), is(users.get(1).getEmail()));
         assertThat(request.get(1), is(users.get(3).getEmail()));
+    }
+
+    private void checkUserAndLevel(User updated, String expectedId, Level expectedLevel){
+        assertThat(updated.getId(), is(expectedId));
+        assertThat(updated.getLevel(), is(expectedLevel));
     }
 
     @Test
@@ -137,9 +140,13 @@ public class UserServiceTest {
     @Test
     public void upgradeAllOrNothing() throws Exception{
 
-        UserServiceImpl testUserServiceImpl = new TestUserServiceImpl(users.get(3).getId());
-        testUserServiceImpl.setUserDao(this.userDao);
-        testUserServiceImpl.setMailSender(mailSender);
+        UserServiceImpl testUserService = new TestUserServiceImpl(users.get(3).getId());
+        testUserService.setUserDao(userDao);
+        testUserService.setMailSender(mailSender);
+
+        UserServiceTx txUserService = new UserServiceTx();
+        txUserService.setTransactionManager(transactionManager);
+        txUserService.setUserService(testUserService);
 
         userDao.deleteAll();
 
@@ -148,7 +155,7 @@ public class UserServiceTest {
         }
 
         try{
-            testUserServiceImpl.upgradeLevels(); // 실행중에 Exception 이 발생해야함
+            txUserService.upgradeLevels(); // 실행중에 Exception 이 발생해야함
             fail("TestUserServiceException expected");
         }catch (TestUserServiceException e){
             // Exception 이 발생했을떄 테스트가 정상 진행
@@ -175,5 +182,60 @@ public class UserServiceTest {
         public void send(SimpleMailMessage[] mailMessage) throws MailException {
 
         }
+    }
+
+    static class MockUserDao implements UserDao {
+
+        private List<User> users;
+        private List<User> updated = new ArrayList<>();
+
+        public MockUserDao(List<User> users) {
+            this.users = users;
+        }
+
+        public List<User> getUpdated() {
+            return this.updated;
+        }
+
+        @Override
+        public void update(User user) {
+            updated.add(user);
+        }
+
+        // 스텁 기능 제공
+        @Override
+        public List<User> getAll() {
+            return this.users;
+        }
+
+        // 목 오브젝트 기능
+        @Override
+        public void add(User user) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public User get(String id) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void deleteAll() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public int getCount() {
+            throw new UnsupportedOperationException();
+        }
+
+    }
+
+    @Test
+    public void movckUpgradelevels() throws Exception {
+
+        UserServiceImpl userServiceImpl = new UserServiceImpl();
+
+
     }
 }

@@ -1,4 +1,4 @@
-package springbook.user.before.dao;
+package springbook.user.modifyed.dao;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import springbook.user.dao.ConnectionMaker;
@@ -12,23 +12,23 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserDao3_19 {
+public class UserDao3_18 {
 
     private ConnectionMaker connectionMaker;
     private DataSource dataSource;
-    private static UserDao3_19 INSTANCE;
+    private static UserDao3_18 INSTANCE;
     private Connection c;
 
-    public UserDao3_19() {
+    public UserDao3_18() {
 
     }
 
-    public UserDao3_19(ConnectionMaker connectionMaker) {
+    public UserDao3_18(ConnectionMaker connectionMaker) {
         this.connectionMaker = connectionMaker;
     }
 
-    public static synchronized UserDao3_19 getInstance() {
-        if (INSTANCE == null) INSTANCE = new UserDao3_19();
+    public static synchronized UserDao3_18 getInstance() {
+        if (INSTANCE == null) INSTANCE = new UserDao3_18();
         return INSTANCE;
     }
 
@@ -65,7 +65,8 @@ public class UserDao3_19 {
 
     public void add(final User user) throws SQLException {
 
-        StatementStrategy st = new StatementStrategy() {
+        class AddStatement implements StatementStrategy {
+
             @Override
             public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
                 PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?,?,?)");
@@ -74,7 +75,9 @@ public class UserDao3_19 {
                 ps.setString(1, user.getPassword());
                 return ps;
             }
-        };
+        }
+
+        StatementStrategy st = new AddStatement();
         jdbcContextWithStatemnetStrategy(st);
 
     }

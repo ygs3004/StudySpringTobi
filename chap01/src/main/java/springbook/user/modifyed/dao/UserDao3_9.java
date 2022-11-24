@@ -1,8 +1,7 @@
-package springbook.user.before.dao;
+package springbook.user.modifyed.dao;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import springbook.user.dao.ConnectionMaker;
-import springbook.user.dao.StatementStrategy;
 import springbook.user.domain.User;
 
 import javax.sql.DataSource;
@@ -11,23 +10,24 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserDao3_22 {
+//public abstract class UserDao3_9 {
+public class UserDao3_9 {
 
     private ConnectionMaker connectionMaker;
     private DataSource dataSource;
-    private static UserDao3_22 INSTANCE;
+    private static UserDao3_9 INSTANCE;
     private Connection c;
 
-    public UserDao3_22() {
+    public UserDao3_9() {
 
     }
 
-    public UserDao3_22(ConnectionMaker connectionMaker) {
+    public UserDao3_9(ConnectionMaker connectionMaker) {
         this.connectionMaker = connectionMaker;
     }
 
-    public static synchronized UserDao3_22 getInstance() {
-        if (INSTANCE == null) INSTANCE = new UserDao3_22();
+    public static synchronized UserDao3_9 getInstance() {
+        // if(INSTANCE == null) INSTANCE = new UserDao3_9();
         return INSTANCE;
     }
 
@@ -41,42 +41,19 @@ public class UserDao3_22 {
         this.dataSource = dataSource;
     }
 
-    public void jdbcContextWithStatemnetStrategy (StatementStrategy stmt) throws SQLException {
-        Connection c = null;
-        PreparedStatement ps = null;
+    public void add(User user) throws SQLException {
 
-        try{
-            c = dataSource.getConnection();
+        Connection c = dataSource.getConnection();
 
-            ps = stmt.makePreparedStatement(c);
+        PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?,?,?)");
+        ps.setString(1, user.getId());
+        ps.setString(2, user.getName());
+        ps.setString(3, user.getPassword());
 
-            ps.executeUpdate();
+        ps.executeUpdate();
 
-        }catch (Exception e) {
-            throw e;
-
-        } finally {
-            if(ps != null) { try { ps.close();} catch (SQLException e){}}
-            if(c != null) { try { c.close();} catch (SQLException e){}}
-        }
-
-    }
-
-    public void add(final User user) throws SQLException {
-
-        jdbcContextWithStatemnetStrategy(
-            new StatementStrategy() {
-                @Override
-                public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
-                    PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?,?,?)");
-                    ps.setString(1, user.getId());
-                    ps.setString(2, user.getName());
-                    ps.setString(3, user.getPassword());
-                    return ps;
-                }
-            }
-        );
-
+        ps.close();
+        c.close();
     }
 
     public User get(String id) throws SQLException {
@@ -107,15 +84,29 @@ public class UserDao3_22 {
 
     public void deleteAll() throws SQLException {
 
-        jdbcContextWithStatemnetStrategy(
-            new StatementStrategy() {
-                @Override
-                public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
-                    return c.prepareStatement("delete from users");
+        Connection c = null;
+        PreparedStatement ps = null;
+
+        try {
+            c = dataSource.getConnection();
+            //ps = makeStatement(c);
+            //ps.executeUpdate();
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            /*if( ps != null){
+                try{
+                    ps.close();
+                }catch (SQLException e){
+                }
+            }*/
+            if (c != null) {
+                try {
+                    c.close();
+                } catch (SQLException e) {
                 }
             }
-        );
-
+        }
     }
 
     public int getCount() throws SQLException {
@@ -153,4 +144,7 @@ public class UserDao3_22 {
             }
         }
     }
+
+    // abstract protected PreparedStatement makeStatement(Connection c) throws SQLException;
+
 }

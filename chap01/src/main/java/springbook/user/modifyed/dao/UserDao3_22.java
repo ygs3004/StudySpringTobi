@@ -1,8 +1,7 @@
-package springbook.user.before.dao;
+package springbook.user.modifyed.dao;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import springbook.user.dao.ConnectionMaker;
-import springbook.user.dao.JdbcContext;
 import springbook.user.dao.StatementStrategy;
 import springbook.user.domain.User;
 
@@ -12,41 +11,60 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserDao3_45 {
+public class UserDao3_22 {
 
     private ConnectionMaker connectionMaker;
-    private JdbcContext jdbcContext;
     private DataSource dataSource;
-    private static UserDao3_45 INSTANCE;
+    private static UserDao3_22 INSTANCE;
     private Connection c;
 
-    public UserDao3_45() {
+    public UserDao3_22() {
 
     }
 
-    public UserDao3_45(ConnectionMaker connectionMaker) {
+    public UserDao3_22(ConnectionMaker connectionMaker) {
         this.connectionMaker = connectionMaker;
     }
 
-    public static synchronized UserDao3_45 getInstance() {
-        if (INSTANCE == null) INSTANCE = new UserDao3_45();
+    public static synchronized UserDao3_22 getInstance() {
+        if (INSTANCE == null) INSTANCE = new UserDao3_22();
         return INSTANCE;
     }
+
 
     public void setConnectionMaker(ConnectionMaker connectionMaker) { //수정자 주입(Setter)
         this.connectionMaker = connectionMaker;
     }
 
-    public void setDataSource(DataSource dataSource) { // 수정자 메소드이면서 JdbcContext에 대한 생성, DI 작업을 동시에 수행한다.
-        this.jdbcContext = new JdbcContext(); // JdbcContext 생성(IoC
-        this.jdbcContext.setDataSource(dataSource); // 의존 오브젝트 주입
-        this.dataSource = dataSource; // JdbcContext를 적용하지 않은 메소드를 위해 저장
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
+    public void jdbcContextWithStatemnetStrategy (StatementStrategy stmt) throws SQLException {
+        Connection c = null;
+        PreparedStatement ps = null;
+
+        try{
+            c = dataSource.getConnection();
+
+            ps = stmt.makePreparedStatement(c);
+
+            ps.executeUpdate();
+
+        }catch (Exception e) {
+            throw e;
+
+        } finally {
+            if(ps != null) { try { ps.close();} catch (SQLException e){}}
+            if(c != null) { try { c.close();} catch (SQLException e){}}
+        }
+
+    }
 
     public void add(final User user) throws SQLException {
 
-        this.jdbcContext.workWithStatementStrategy(
+        jdbcContextWithStatemnetStrategy(
             new StatementStrategy() {
                 @Override
                 public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
@@ -89,7 +107,14 @@ public class UserDao3_45 {
 
     public void deleteAll() throws SQLException {
 
-        this.jdbcContext.executeSql("delete from users");
+        jdbcContextWithStatemnetStrategy(
+            new StatementStrategy() {
+                @Override
+                public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+                    return c.prepareStatement("delete from users");
+                }
+            }
+        );
 
     }
 

@@ -1,8 +1,8 @@
-package springbook.user.before.dao;
+package springbook.user.modifyed.dao;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import springbook.user.dao.ConnectionMaker;
-import springbook.user.dao.JdbcContext;
+import springbook.user.dao.DeleteAllStatement;
 import springbook.user.dao.StatementStrategy;
 import springbook.user.domain.User;
 
@@ -12,24 +12,23 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserDao3_25 {
+public class UserDao3_19 {
 
     private ConnectionMaker connectionMaker;
-    private JdbcContext jdbcContext;
     private DataSource dataSource;
-    private static UserDao3_25 INSTANCE;
+    private static UserDao3_19 INSTANCE;
     private Connection c;
 
-    public UserDao3_25() {
+    public UserDao3_19() {
 
     }
 
-    public UserDao3_25(ConnectionMaker connectionMaker) {
+    public UserDao3_19(ConnectionMaker connectionMaker) {
         this.connectionMaker = connectionMaker;
     }
 
-    public static synchronized UserDao3_25 getInstance() {
-        if (INSTANCE == null) INSTANCE = new UserDao3_25();
+    public static synchronized UserDao3_19 getInstance() {
+        if (INSTANCE == null) INSTANCE = new UserDao3_19();
         return INSTANCE;
     }
 
@@ -38,28 +37,45 @@ public class UserDao3_25 {
         this.connectionMaker = connectionMaker;
     }
 
+
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    public void setJdbcContext(JdbcContext jdbcContext) {
-        this.jdbcContext = jdbcContext;
+    public void jdbcContextWithStatemnetStrategy (StatementStrategy stmt) throws SQLException {
+        Connection c = null;
+        PreparedStatement ps = null;
+
+        try{
+            c = dataSource.getConnection();
+
+            ps = stmt.makePreparedStatement(c);
+
+            ps.executeUpdate();
+
+        }catch (Exception e) {
+            throw e;
+
+        } finally {
+            if(ps != null) { try { ps.close();} catch (SQLException e){}}
+            if(c != null) { try { c.close();} catch (SQLException e){}}
+        }
+
     }
 
     public void add(final User user) throws SQLException {
 
-        this.jdbcContext.workWithStatementStrategy(
-            new StatementStrategy() {
-                @Override
-                public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
-                    PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?,?,?)");
-                    ps.setString(1, user.getId());
-                    ps.setString(2, user.getName());
-                    ps.setString(3, user.getPassword());
-                    return ps;
-                }
+        StatementStrategy st = new StatementStrategy() {
+            @Override
+            public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+                PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?,?,?)");
+                ps.setString(1, user.getId());
+                ps.setString(1, user.getName());
+                ps.setString(1, user.getPassword());
+                return ps;
             }
-        );
+        };
+        jdbcContextWithStatemnetStrategy(st);
 
     }
 
@@ -91,14 +107,8 @@ public class UserDao3_25 {
 
     public void deleteAll() throws SQLException {
 
-        this.jdbcContext.workWithStatementStrategy(
-            new StatementStrategy() {
-                @Override
-                public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
-                    return c.prepareStatement("delete from users");
-                }
-            }
-        );
+        StatementStrategy st = new DeleteAllStatement(); // 선정한 전략 클래스 오브젝트 생성
+        jdbcContextWithStatemnetStrategy(st); // 컨텐스트 호출, 전략 오브젝트 전달
 
     }
 

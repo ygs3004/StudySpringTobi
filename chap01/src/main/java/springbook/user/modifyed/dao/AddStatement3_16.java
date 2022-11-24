@@ -1,4 +1,4 @@
-package springbook.user.before.dao;
+package springbook.user.modifyed.dao;
 
 import springbook.user.dao.StatementStrategy;
 import springbook.user.domain.User;

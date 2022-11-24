@@ -1,4 +1,4 @@
-package springbook.user.before.dao;
+package springbook.user.modifyed.dao;
 
 import springbook.user.dao.ConnectionMaker;
 import springbook.user.domain.User;
@@ -8,26 +8,32 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserDao1_26Before {
+public class UserDao1_42 {
 
-    private static UserDao1_26Before INSTANCE;
-    private ConnectionMaker connectionMaker; // 초기 설정 후 변하지 않는 읽기전용 인스턴스 변수 (싱글톤역할)
+    private static UserDao1_42 INSTANCE;
+    private ConnectionMaker connectionMaker;
     private Connection c;
-    private User user; // c, user -> 매번 새로운 값으로 바뀌는 정보를 담은 인스턴스 변수
+    private User user;
 
-    private UserDao1_26Before() {
+    public UserDao1_42() {
+        /* 생성자 주입시
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+        this.connectionMaker = context.getBean("connectionMaker", ConnectionMaker.class);
+        */
 
     }
 
-    public UserDao1_26Before(ConnectionMaker connectionMaker){
+    public UserDao1_42(ConnectionMaker connectionMaker){
         this.connectionMaker=connectionMaker;
-
-
     }
 
-    public static synchronized UserDao1_26Before getInstance(){
-        if(INSTANCE == null) INSTANCE = new UserDao1_26Before();
+    public static synchronized UserDao1_42 getInstance(){
+        if(INSTANCE == null) INSTANCE = new UserDao1_42();
         return INSTANCE;
+    }
+
+    public void setConnectionMaker(ConnectionMaker connectionMaker) { //수정자 주입(Setter)
+        this.connectionMaker = connectionMaker;
     }
 
     public void add(User user) throws ClassNotFoundException, SQLException{
