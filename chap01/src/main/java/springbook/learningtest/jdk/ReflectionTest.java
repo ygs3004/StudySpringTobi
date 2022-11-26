@@ -3,11 +3,18 @@ package springbook.learningtest.jdk;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class ReflectionTest {
+
+    Hello proxiedHello = (Hello) Proxy.newProxyInstance(
+            getClass().getClassLoader(),
+            new Class[] {Hello.class},
+            new UppercaseHandler(new HelloTarget())
+    );
 
     @Test
     public void invokeMethod() throws Exception {
@@ -30,10 +37,10 @@ public class ReflectionTest {
         assertThat(hello.sayHi("GunSoo"), is("Hi GunSoo") );
         assertThat(hello.sayThankYou("GunSoo"), is("Thank You GunSoo") );
 
-        Hello proxiedHello = new HelloUppercase(hello);
         assertThat(proxiedHello.sayHello("GunSoo"), is("HELLO GUNSOO") );
         assertThat(proxiedHello.sayHi("GunSoo"), is("HI GUNSOO") );
         assertThat(proxiedHello.sayThankYou("GunSoo"), is("THANK YOU GUNSOO") );
+
     }
 
 }

@@ -1,7 +1,5 @@
 package springbook.learningtest.template.before;
 
-import springbook.learningtest.template.before.LineCallBack3_41;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;

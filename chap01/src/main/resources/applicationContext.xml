@@ -17,7 +17,7 @@
         <property name="dataSource" ref="dataSource"/> <!-- ref="connectionMaker" -->
     </bean>
 
-    <bean id="userService" class="springbook.user.service.UserServiceTx">
+    <bean id="userService" class="springbook.user.service.before.UserServiceTx">
         <property name="transactionManager" ref="transactionManger"/>
         <property name="userService" ref="userServiceImpl" />
     </bean>
@@ -32,5 +32,9 @@
     </bean>
 
     <bean id="mailSender" class="springbook.user.service.DummyMailSender"/>
+
+    <bean id="message" class="springbook.learningtest.spring.factorybean.MessageFactoryBean">
+        <property name="text" value="Factory Bean"/>
+    </bean>
 
 </beans>
