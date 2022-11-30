@@ -1,12 +1,10 @@
-package springbook.user.service;
+/*
+package springbook.user.service.before;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.aop.framework.ProxyFactory;
-import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -17,8 +15,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 import springbook.user.dao.UserDao;
 import springbook.user.domain.Level;
 import springbook.user.domain.User;
+import springbook.user.service.TransactionAdvice;
+import springbook.user.service.UserService;
+import springbook.user.service.UserServiceImpl;
 
-
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +33,7 @@ import static springbook.user.service.UserServiceImpl.MIN_RECOMMED_FOR_GOLD;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/test-applicationContext.xml")
 @DirtiesContext
-public class UserServiceTest {
+public class UserServiceTest6_37 {
 
     @Autowired
     UserService userService;
@@ -47,8 +48,6 @@ public class UserServiceTest {
 
     List<User> users;
 
-    @Autowired
-    ApplicationContext context;
 
     @Before
     public void setUp(){
@@ -144,17 +143,20 @@ public class UserServiceTest {
     }
 
     @Test
-    @DirtiesContext
     public void upgradeAllOrNothing() throws Exception{
 
         UserServiceImpl testUserService = new TestUserServiceImpl(users.get(3).getId());
         testUserService.setUserDao(userDao);
         testUserService.setMailSender(mailSender);
 
-        ProxyFactoryBean txProxyFactoryBean = context.getBean("&userService", ProxyFactoryBean.class);
+        TransactionAdvice txHandler = new TransactionAdvice();
+        txHandler.setTarget(testUserService);
+        txHandler.setTransactionManager(transactionManager);
+        txHandler.setPattern("upgradeLevels");
 
-        txProxyFactoryBean.setTarget(testUserService);
-        UserService txUserService = (UserService) txProxyFactoryBean.getObject();
+        UserService txUserService = (UserService)Proxy.newProxyInstance(
+                getClass().getClassLoader(), new Class[] {UserService.class}, txHandler
+        );
 
         userDao.deleteAll();
 
@@ -247,3 +249,4 @@ public class UserServiceTest {
 
     }
 }
+*/

@@ -1,10 +1,9 @@
-package springbook.user.service;
+/*
+package springbook.user.before;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.aop.framework.ProxyFactory;
-import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mail.MailException;
@@ -17,7 +16,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 import springbook.user.dao.UserDao;
 import springbook.user.domain.Level;
 import springbook.user.domain.User;
-
+import springbook.user.service.TxProxyFactoryBean;
+import springbook.user.service.UserService;
+import springbook.user.service.UserServiceImpl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +33,7 @@ import static springbook.user.service.UserServiceImpl.MIN_RECOMMED_FOR_GOLD;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/test-applicationContext.xml")
 @DirtiesContext
-public class UserServiceTest {
+public class UserServiceTest6_48 {
 
     @Autowired
     UserService userService;
@@ -151,8 +152,7 @@ public class UserServiceTest {
         testUserService.setUserDao(userDao);
         testUserService.setMailSender(mailSender);
 
-        ProxyFactoryBean txProxyFactoryBean = context.getBean("&userService", ProxyFactoryBean.class);
-
+        TxProxyFactoryBean txProxyFactoryBean = context.getBean("&userService", TxProxyFactoryBean.class);
         txProxyFactoryBean.setTarget(testUserService);
         UserService txUserService = (UserService) txProxyFactoryBean.getObject();
 
@@ -247,3 +247,4 @@ public class UserServiceTest {
 
     }
 }
+*/

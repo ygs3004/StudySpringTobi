@@ -1,3 +1,4 @@
+/*
 package springbook.user.service;
 
 import org.springframework.beans.factory.FactoryBean;
@@ -31,7 +32,7 @@ public class TxProxyFactoryBean implements FactoryBean<Object> {
     //FactoryBean 인터페이스 구현 메소드
     @Override
     public Object getObject() throws Exception {
-        TransactionHandler txHandler = new TransactionHandler();
+        TransactionAdvice txHandler = new TransactionAdvice();
         txHandler.setTarget(target);
         txHandler.setTransactionManager(transactionManager);
         txHandler.setPattern(pattern);
@@ -50,3 +51,4 @@ public class TxProxyFactoryBean implements FactoryBean<Object> {
         return false; // 싱글톤 빈이 아니라는 뜻이 아니라 getObject가 매번 같은 오브젝트를 리턴하지 않는다는 의미
     }
 }
+*/

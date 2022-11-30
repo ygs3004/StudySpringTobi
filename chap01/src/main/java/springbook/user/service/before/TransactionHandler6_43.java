@@ -1,4 +1,4 @@
-package springbook.user.service;
+package springbook.user.service.before;
 
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
@@ -8,7 +8,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class TransactionHandler implements InvocationHandler {
+public class TransactionHandler6_43 implements InvocationHandler {
 
     private Object target;
     private PlatformTransactionManager transactionManager; // 트랜잭션 기능을 제공하는데 필요한 트랜잭션 매니저

@@ -17,11 +17,6 @@
         <property name="dataSource" ref="dataSource"/> <!-- ref="connectionMaker" -->
     </bean>
 
-    <bean id="userService" class="springbook.user.service.before.UserServiceTx">
-        <property name="transactionManager" ref="transactionManger"/>
-        <property name="userService" ref="userServiceImpl" />
-    </bean>
-
     <bean id="userServiceImpl" class="springbook.user.service.UserServiceImpl">
         <property name="userDao" ref="userDao"/>
         <property name="mailSender" ref="mailSender"/>
@@ -33,8 +28,25 @@
 
     <bean id="mailSender" class="springbook.user.service.DummyMailSender"/>
 
-    <bean id="message" class="springbook.learningtest.spring.factorybean.MessageFactoryBean">
-        <property name="text" value="Factory Bean"/>
+    <bean id="userService" class="springbook.user.service.TxProxyFactoryBean">
+        <property name="target" ref="userServiceImpl"/>
+        <property name="transactionManager" ref="transactionManger"/>
+        <property name="pattern" value="upgradeLevels"/>
+        <property name="serviceInterface" value="springbook.user.service.UserService"/>
     </bean>
+
+    <bean id="transactionAdvice" class="springbook.user.service.TransactionAdvice">
+        <property name="transactionManager" ref="transactionManger"/>
+    </bean>
+
+    <bean id="transactionPointcut" class="org.springframework.aop.support.NameMatchMethodPointcut">
+        <property name="mappedName" value="upgrade*"/>
+    </bean>
+
+    <bean id="transactionAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+        <property name="advice" ref="transactionAdvice"/>
+        <property name="pointcut" ref="transactionPointcut"/>
+    </bean>
+
 
 </beans>
