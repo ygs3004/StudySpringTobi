@@ -1,3 +1,4 @@
+/*
 package springbook.user.service.before;
 
 import org.junit.Before;
@@ -240,3 +241,4 @@ public class UserServiceTest6_28 {
 
     }
 }
+*/

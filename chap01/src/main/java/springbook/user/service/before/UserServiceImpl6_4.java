@@ -1,3 +1,4 @@
+/*
 package springbook.user.service.before;
 
 import org.springframework.mail.MailSender;
@@ -97,3 +98,4 @@ public class UserServiceImpl6_4 implements UserService {
         }
     }
 }
+*/

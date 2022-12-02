@@ -15,7 +15,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import springbook.user.dao.UserDao;
 import springbook.user.domain.Level;
 import springbook.user.domain.User;
-import springbook.user.service.TransactionAdvice;
+import springbook.user.service.before.TransactionAdvice;
 import springbook.user.service.UserService;
 import springbook.user.service.UserServiceImpl;
 

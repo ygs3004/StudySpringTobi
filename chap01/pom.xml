@@ -87,7 +87,7 @@
             <artifactId>mail</artifactId>
             <version>1.4</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework/spring-context-support -->
+        <!-- https://mvnrepository.com/artifactg.springframework/spring-context-support -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
@@ -103,7 +103,12 @@
             <artifactId>aopalliance</artifactId>
             <version>1.0</version>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjtools -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjtools</artifactId>
+            <version>1.6.6</version>
+        </dependency>
     </dependencies>
 
     <properties>

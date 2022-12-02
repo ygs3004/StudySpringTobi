@@ -7,6 +7,7 @@ import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.dao.TransientDataAccessResourceException;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -36,8 +37,10 @@ public class UserServiceTest {
 
     @Autowired
     UserService userService;
+
     @Autowired
-    UserServiceImpl userServiceImpl;
+    UserService testUserService;
+
     @Autowired
     UserDao userDao;
     @Autowired
@@ -125,36 +128,36 @@ public class UserServiceTest {
         }
     }
 
-    static class TestUserServiceImpl extends UserServiceImpl {
+    static class TestUserService extends UserServiceImpl {
 
-        private String id;
-
-        private TestUserServiceImpl(String id){
-            this.id = id;
-        }
+        private String id = "dgumayusi";
 
         @Override
         public void upgradeLevel(User user){
             if(user.getId().equals(this.id)) throw new TestUserServiceException();
             super.upgradeLevel(user);
         }
+
+        public List<User> getAll(){ // get으로 시작하는 메소드 -> 읽기 전용 트랜잭션 대상
+            for(User user : super.getAll()){
+                super.update(user); // 쓰기 시도로 인한 예외 발생
+            }
+            return null; // 메소드가 끝나기 전 예외가 발생함, 컴파일을 위해 무의미한 값 적용
+        }
+
+    }
+
+    @Test(expected = TransientDataAccessResourceException.class)
+    public void readOnlyTransactionAttribute(){
+        testUserService.getAll();
+        // 트랜잭션 읽기전용 속성 위반으로 예외발생, Tobi 의 스프링 책과 다르게 예외가 발생하지 않음 -> 검색결과 : readOnly 옵션은 JDBC 에 힌트를 주는 형식으로 예외가 발생하게 되어있는데 오라클에선 안되었음
     }
 
     static class TestUserServiceException extends RuntimeException {
     }
 
     @Test
-    @DirtiesContext
     public void upgradeAllOrNothing() throws Exception{
-
-        UserServiceImpl testUserService = new TestUserServiceImpl(users.get(3).getId());
-        testUserService.setUserDao(userDao);
-        testUserService.setMailSender(mailSender);
-
-        ProxyFactoryBean txProxyFactoryBean = context.getBean("&userService", ProxyFactoryBean.class);
-
-        txProxyFactoryBean.setTarget(testUserService);
-        UserService txUserService = (UserService) txProxyFactoryBean.getObject();
 
         userDao.deleteAll();
 
@@ -163,7 +166,7 @@ public class UserServiceTest {
         }
 
         try{
-            txUserService.upgradeLevels(); // 실행중에 Exception 이 발생해야함
+            this.testUserService.upgradeLevels(); // 실행중에 Exception 이 발생해야함
             fail("TestUserServiceException expected");
         }catch (TestUserServiceException e){
             // Exception 이 발생했을떄 테스트가 정상 진행
@@ -241,9 +244,11 @@ public class UserServiceTest {
 
     @Test
     public void movckUpgradelevels() throws Exception {
-
         UserServiceImpl userServiceImpl = new UserServiceImpl();
+    }
 
-
+    @Test
+    public void advisorAutoProxyuCreator(){
+        assertThat(testUserService, is(java.lang.reflect.Proxy.class));
     }
 }

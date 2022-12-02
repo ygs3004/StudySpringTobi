@@ -35,7 +35,7 @@
         <property name="serviceInterface" value="springbook.user.service.UserService"/>
     </bean>
 
-    <bean id="transactionAdvice" class="springbook.user.service.TransactionAdvice">
+    <bean id="transactionAdvice" class="springbook.user.service.before.TransactionAdvice">
         <property name="transactionManager" ref="transactionManger"/>
     </bean>
 
