@@ -33,5 +33,6 @@ select * from users;
 
 drop table users;
 
+delete from users;
 
 SELECT CURRENT_DATE;

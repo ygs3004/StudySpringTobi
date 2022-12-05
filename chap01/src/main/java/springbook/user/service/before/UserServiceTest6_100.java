@@ -1,4 +1,4 @@
-package springbook.user.service;
+package springbook.user.service.before;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,13 +13,13 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 import springbook.user.dao.UserDao;
 import springbook.user.domain.Level;
 import springbook.user.domain.User;
-
+import springbook.user.service.UserService;
+import springbook.user.service.UserServiceImpl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,9 +33,8 @@ import static springbook.user.service.UserServiceImpl.MIN_RECOMMED_FOR_GOLD;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/test-applicationContext.xml")
-@Transactional
-@TransactionConfiguration(defaultRollback = false) // 테스트에서 트랜잭션 롤백여부 설정
-public class UserServiceTest {
+@DirtiesContext
+public class UserServiceTest6_100 {
 
     @Autowired
     UserService userService;
@@ -255,7 +254,8 @@ public class UserServiceTest {
     }
 
     @Test
-    @Rollback // 메소드에서 롤백방법 재설정
+    @Transactional // Test 에서 Transactional 어노테이션은 기본적으로 자동 롤백함
+    @Rollback(false) // Test 에서도 롤백되지 않음, 메소드 레벨에만 적용가능
     public void transactionSync(){
         userDao.deleteAll();
         userService.add(users.get(0));

@@ -1,4 +1,4 @@
-package springbook.user.service;
+package springbook.user.service.before;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,16 +10,16 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import springbook.user.dao.UserDao;
 import springbook.user.domain.Level;
 import springbook.user.domain.User;
-
+import springbook.user.service.UserService;
+import springbook.user.service.UserServiceImpl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,9 +33,8 @@ import static springbook.user.service.UserServiceImpl.MIN_RECOMMED_FOR_GOLD;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/test-applicationContext.xml")
-@Transactional
-@TransactionConfiguration(defaultRollback = false) // 테스트에서 트랜잭션 롤백여부 설정
-public class UserServiceTest {
+@DirtiesContext
+public class UserServiceTest6_97 {
 
     @Autowired
     UserService userService;
@@ -255,11 +254,22 @@ public class UserServiceTest {
     }
 
     @Test
-    @Rollback // 메소드에서 롤백방법 재설정
     public void transactionSync(){
-        userDao.deleteAll();
-        userService.add(users.get(0));
-        userService.add(users.get(1));
+
+        DefaultTransactionDefinition txDefinition = new DefaultTransactionDefinition();
+        // 트랜잭션을 요청 -> 새로운 트랜잭션을 시작, 동기화
+        TransactionStatus txStatus = transactionManager.getTransaction(txDefinition);
+
+        // 롤백테스트 -> 테스트가 끝나면 무조건 롤백해버림
+        try{
+            userDao.deleteAll();
+            userService.add(users.get(0));
+            userService.add(users.get(1));
+        }
+        finally {
+            transactionManager.rollback(txStatus); // 강제로 롤백, 트랜잭션 시작전으로 돌아감
+        }
+
     }
 
 }
