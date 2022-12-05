@@ -13,10 +13,10 @@
     <!--<bean id="connectionMaker" class="springbook.user.dao.DConnectionMaker"/>-->
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
-        <property name="driverClass" value="com.mysql.cj.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:3306/tobi"/>
-        <property name="username" value="tobitest"/>
-        <property name="password" value="tobitest"/>
+        <property name="driverClass" value="oracle.jdbc.driver.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
+        <property name="username" value="tobiTest"/>
+        <property name="password" value="tobi"/>
     </bean>
 
     <bean id="userDao" class="springbook.user.dao.UserDaoJdbc">
@@ -43,6 +43,18 @@
 
     <!-- 테스트용 UserService -->
     <bean id="testUserService" class="springbook.user.service.UserServiceTest$TestUserService" parent="userService" />
+
+    <aop:config>
+        <aop:advisor advice-ref="transactionAdvice" pointcut="bean(*Service)"/> <!--DefaultPointcutAdvisor를 등록해준다.-->
+    </aop:config>
+
+    <!-- 트랜잭션 속성 정의 -->
+    <tx:advice id="transactionAdvice"> <!-- 트랜잭션 매니저의 빈 아이디가 transactionManger 라면 transaction-manager="transactionManger 생략 가능 -->
+        <tx:attributes>
+            <tx:method name="get*" read-only="true"/> <!-- ready-only의 경우 트랜잭션의 실제 시작위치가 아니라면 무시된다 -->
+            <tx:method name="*"/> <!-- propagation="REQUIRED"라면 생략 가능 -->
+        </tx:attributes>
+    </tx:advice>
 
     <tx:annotation-driven/>
 

@@ -1,10 +1,8 @@
-package springbook.user.service;
+package springbook.user.service.before;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.aop.framework.ProxyFactory;
-import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.dao.TransientDataAccessResourceException;
@@ -20,7 +18,8 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import springbook.user.dao.UserDao;
 import springbook.user.domain.Level;
 import springbook.user.domain.User;
-
+import springbook.user.service.UserService;
+import springbook.user.service.UserServiceImpl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,7 +34,7 @@ import static springbook.user.service.UserServiceImpl.MIN_RECOMMED_FOR_GOLD;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/test-applicationContext.xml")
 @DirtiesContext
-public class UserServiceTest {
+public class UserServiceTest6_95 {
 
     @Autowired
     UserService userService;
@@ -257,20 +256,21 @@ public class UserServiceTest {
     @Test
     public void transactionSync(){
 
+        userDao.deleteAll();
+
         DefaultTransactionDefinition txDefinition = new DefaultTransactionDefinition();
+        txDefinition.setReadOnly(true); // 읽기전용으로 정의
+        
         // 트랜잭션을 요청 -> 새로운 트랜잭션을 시작, 동기화
         TransactionStatus txStatus = transactionManager.getTransaction(txDefinition); 
 
-        // 롤백테스트 -> 테스트가 끝나면 무조건 롤백해버림
-        try{
-            userDao.deleteAll();
-            userService.add(users.get(0));
-            userService.add(users.get(1));
-        }
-        finally {
-            transactionManager.rollback(txStatus); // 강제로 롤백, 트랜잭션 시작전으로 돌아감
-        }
-        
+        //앞에서 만들어진 트랜잭션에 모두 참여
+        userDao.deleteAll();
+        userService.add(users.get(0));
+        userService.add(users.get(1));
+
+        transactionManager.commit(txStatus); // 앞에 시작한 트랜잭션을 커밋
+
     }
 
 }
