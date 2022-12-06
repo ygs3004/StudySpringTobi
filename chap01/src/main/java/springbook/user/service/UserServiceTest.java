@@ -33,8 +33,8 @@ import static springbook.user.service.UserServiceImpl.MIN_RECOMMED_FOR_GOLD;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/test-applicationContext.xml")
-@Transactional
-@TransactionConfiguration(defaultRollback = false) // 테스트에서 트랜잭션 롤백여부 설정
+//@Transactional
+//@TransactionConfiguration(defaultRollback = false) // 테스트에서 트랜잭션 롤백여부 설정
 public class UserServiceTest {
 
     @Autowired

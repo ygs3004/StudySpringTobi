@@ -1,25 +1,25 @@
-package springbook.user.dao;
+package springbook.user.dao.before;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import springbook.user.dao.UserDao;
 import springbook.user.domain.Level;
 import springbook.user.domain.User;
-import springbook.user.sqlservice.SqlService;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class UserDaoJdbc implements UserDao{
+public class UserDaoJdbc7_2 implements UserDao {
 
-    private SqlService sqlService;
-
-    public void setSqlService(SqlService sqlService) {
-        this.sqlService = sqlService;
-    }
+    private String sqlAdd;
 
     private JdbcTemplate jdbcTemplate;
+
+    public void setSqlAdd(String sqlAdd) {
+        this.sqlAdd = sqlAdd;
+    }
 
     public void setDataSource(DataSource dataSource) { // 수정자 메소드이면서 JdbcTemplate에 대한 생성, DI 작업을 동시에 수행한다.
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -43,32 +43,34 @@ public class UserDaoJdbc implements UserDao{
 
     @Override
     public void add(final User user) {
-        this.jdbcTemplate.update(this.sqlService.getSql("userAdd"), user.getId(), user.getName(), user.getPassword(), user.getEmail(), user.getLevel().intValue(), user.getLogin(), user.getRecommend());
+            int a = this.jdbcTemplate.update("insert into users(id, name, password, level, login, recommend, email)" +
+                    " values(?,?,?,?,?,?,?)", user.getId(), user.getName(), user.getPassword(), user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getEmail() );
     }
 
     @Override
     public User get(String id)  {
-        return this.jdbcTemplate.queryForObject(this.sqlService.getSql("userGet"), new Object[]{id}, userMapper);
-    }
-
-    @Override
-    public List<User> getAll(){
-        return this.jdbcTemplate.query(this.sqlService.getSql("userGetAll"), userMapper);
+        return this.jdbcTemplate.queryForObject("select * from users where id=?", new Object[]{id}, userMapper);
     }
 
     @Override
     public void deleteAll() {
-        this.jdbcTemplate.update(this.sqlService.getSql("userDeleteAll"));
+        this.jdbcTemplate.update("delete from users");
     }
 
     @Override
     public int getCount() {
-        return this.jdbcTemplate.queryForInt(this.sqlService.getSql("userGetCount"));
+        return this.jdbcTemplate.queryForInt("select count(*) from users");
     }
 
     @Override
     public void update(User user) {
-        this.jdbcTemplate.update(this.sqlService.getSql("userUpdate"), user.getName(), user.getPassword(), user.getEmail(), user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getId());
+        this.jdbcTemplate.update("update users set name =?, password=?, level=?, login=?, recommend=?, email=? where id=?",
+                user.getName(), user.getPassword(), user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getEmail(), user.getId());
+    }
+
+    @Override
+    public List<User> getAll(){
+        return this.jdbcTemplate.query("select * from users order by id", userMapper);
     }
 
 }

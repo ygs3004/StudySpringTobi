@@ -2,22 +2,15 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
-       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/aop
                            http://www.springframework.org/schema/aop/spring-aop.xsd
-                           http://www.springframework.org/schema/context
-                           http://www.springframework.org/schema/context/spring-context.xsd
                            http://www.springframework.org/schema/tx
                            http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
     <!--<bean id="connectionMaker" class="springbook.user.dao.DConnectionMaker"/>-->
-
-    <tx:annotation-driven/> <!-- @Transactional 이 붙은 타입의 메소드에 트랜잭션 부가기능을 담은 프록시를 추가하도록 만들어주는 후처리기 등록 -->
-
-    <context:annotation-config/>  <!-- 코드의 애노테이션을 이용해서 부가적인 빈 설정 또는 초기화 작업을 해주는 후처리기 등록 @PostConstruct 사용가능 -->
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
         <property name="driverClass" value="com.mysql.cj.jdbc.Driver"/>
@@ -28,15 +21,7 @@
 
     <bean id="userDao" class="springbook.user.dao.UserDaoJdbc">
         <property name="dataSource" ref="dataSource"/> <!-- ref="connectionMaker" -->
-        <property name="sqlService" ref="sqlService"/>
-    </bean>
 
-    <bean id="sqlService" class="springbook.user.sqlservice.OxmSqlService">
-        <property name="unmarshaller" ref="unmarshaller"/>
-    </bean>
-
-    <bean id="unmarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
-        <property name="contextPath" value="springbook.user.sqlservice.jaxb"/>
     </bean>
 
     <bean id="userService" class="springbook.user.service.UserServiceImpl">
@@ -59,5 +44,7 @@
 
     <!-- 테스트용 UserService -->
     <bean id="testUserService" class="springbook.user.service.UserServiceTest$TestUserService" parent="userService" />
+
+    <tx:annotation-driven/>
 
 </beans>

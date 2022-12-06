@@ -31,12 +31,8 @@
         <property name="sqlService" ref="sqlService"/>
     </bean>
 
-    <bean id="sqlService" class="springbook.user.sqlservice.OxmSqlService">
-        <property name="unmarshaller" ref="unmarshaller"/>
-    </bean>
-
-    <bean id="unmarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
-        <property name="contextPath" value="springbook.user.sqlservice.jaxb"/>
+    <bean id="sqlService" class="springbook.user.sqlservice.XmlSqlService">
+        <property name="sqlmapFile" value="sqlmap.xml"/>
     </bean>
 
     <bean id="userService" class="springbook.user.service.UserServiceImpl">
