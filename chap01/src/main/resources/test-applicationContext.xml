@@ -33,9 +33,16 @@
 
     <bean id="sqlService" class="springbook.user.sqlservice.OxmSqlService">
         <property name="unmarshaller" ref="unmarshaller"/>
-        <property name="sqlmap" value="classpath:springbook/user/dao/sqlmap.xml"/>
+        <property name="sqlRegistry" ref="sqlRegistry"/>
         <!-- 파일 시스템의경우 value="file:/opt/resources/sqlmap.xml"-->
         <!-- HTTP 프로토콜 접근 가능 웹리소스의 경우 value="http://www.epril.copm/resources/sqlmap.xml -->
+    </bean>
+
+    <!--<bean id="sqlRegistry" class="springbook.user.sqlservice.MyUpdateableSqlRegistry"/>-->
+    <bean id="sqlRegistry" class="springbook.user.sqlservice.updatable.ConcurrentHashMapSqlRegistry"/>
+
+    <bean id="sqlAdminService" class="springbook.user.sqlservice.SqlAdminService">
+        <property name="updatableSqlRegistry" ref="sqlRegistry"/>
     </bean>
 
     <bean id="unmarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
