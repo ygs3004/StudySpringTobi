@@ -41,9 +41,9 @@
     <!--<bean id="sqlRegistry" class="springbook.user.sqlservice.MyUpdateableSqlRegistry"/>-->
     <bean id="sqlRegistry" class="springbook.user.sqlservice.updatable.ConcurrentHashMapSqlRegistry"/>
 
-    <bean id="sqlAdminService" class="springbook.user.sqlservice.SqlAdminService">
+<!--    <bean id="sqlAdminService" class="springbook.user.sqlservice.SqlAdminService">
         <property name="updatableSqlRegistry" ref="sqlRegistry"/>
-    </bean>
+    </bean>-->
 
     <bean id="unmarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
         <property name="contextPath" value="springbook.user.sqlservice.jaxb"/>

@@ -129,6 +129,14 @@
             <version>1.2</version>
         </dependency>
 
+        <!-- 내장형 DB HSQL DB -->
+        <dependency>
+            <groupId>hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>1.8.0.10</version>
+        </dependency>
+
+
     </dependencies>
 
     <properties>
