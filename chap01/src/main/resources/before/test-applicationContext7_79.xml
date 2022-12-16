@@ -40,14 +40,8 @@
         <!-- HTTP 프로토콜 접근 가능 웹리소스의 경우 value="http://www.epril.copm/resources/sqlmap.xml -->
     </bean>
 
-    <!-- HSQL 내장형 DB 설정 -->
-    <jdbc:embedded-database id="embeddedDatabase" type="HSQL">
-        <jdbc:script location="classpath:springbook/user/sqlservice/updatable/sqlRegistrySchema.sql"/>
-    </jdbc:embedded-database>
-
-    <bean id="sqlRegistry" class="springbook.user.sqlservice.updatable.EmbeddedDbSqlRegistry">
-        <property name="dataSource" ref="embeddedDatabase"/>
-    </bean>
+    <!--<bean id="sqlRegistry" class="springbook.user.sqlservice.MyUpdateableSqlRegistry"/>-->
+    <bean id="sqlRegistry" class="springbook.user.sqlservice.updatable.ConcurrentHashMapSqlRegistry"/>
 
 <!--    <bean id="sqlAdminService" class="springbook.user.sqlservice.SqlAdminService">
         <property name="updatableSqlRegistry" ref="sqlRegistry"/>
@@ -77,5 +71,10 @@
 
     <!-- 테스트용 UserService -->
     <bean id="testUserService" class="springbook.user.service.UserServiceTest$TestUserService" parent="userService" />
+
+    <!-- HSQL 내장형 DB 설정 -->
+    <jdbc:embedded-database id="embeddedDatabase" type="HSQL">
+        <jdbc:script location="classpath:springbook/user/sqlservice/updatable/sqlRegistrySchema.sql"/>
+    </jdbc:embedded-database>
 
 </beans>
