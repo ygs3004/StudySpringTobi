@@ -38,7 +38,8 @@ public class UserDaoTest {
 
     public static void main(String[] args) {
         JUnitCore.main("springbook.user.dao.UserDaoTest", "springbook.user.service.UserServiceTest", "springbook.user.dao.UserTest",
-                "springbook.user.sqlservice.updatable.ConcurrentHashMapSqlRegistryTest");
+                "springbook.user.sqlservice.updatable.ConcurrentHashMapSqlRegistryTest", "springbook.learingtest..spring.embeddeddb.EmbeddedDbTest",
+                "spring.user.sqlservice.updatable.EmbeddedDbSqlRegistryTest");
     }
 
     @Before

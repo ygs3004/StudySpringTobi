@@ -34,34 +34,34 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
-            <version>3.0.7.RELEASE</version>
+            <version>3.1.2.RELEASE</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>3.0.7.RELEASE</version>
+            <version>3.1.2.RELEASE</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>3.0.7.RELEASE</version>
+            <version>3.1.2.RELEASE</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-expression -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-expression</artifactId>
-            <version>3.0.7.RELEASE</version>
+            <version>3.1.2.RELEASE</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
-            <version>3.0.7.RELEASE</version>
+            <version>3.1.2.RELEASE</version>
         </dependency>
 
         <dependency>
@@ -73,7 +73,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>3.0.7.RELEASE</version>
+            <version>3.1.2.RELEASE</version>
         </dependency>
 
         <!-- 메일 서비스 추상화 라이브러리 -->
@@ -91,12 +91,12 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
-            <version>3.0.7.RELEASE</version>
+            <version>3.1.2.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
-            <version>3.0.7.RELEASE</version>
+            <version>3.1.2.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>aopalliance</groupId>
@@ -121,7 +121,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-oxm</artifactId>
-            <version>3.0.7.RELEASE</version>
+            <version>3.1.2.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.castor</groupId>
