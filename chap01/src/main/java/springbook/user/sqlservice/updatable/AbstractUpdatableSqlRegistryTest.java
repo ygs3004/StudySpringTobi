@@ -5,7 +5,6 @@ import org.junit.Test;
 import springbook.issuetracker.sqlservice.SqlUpdateFailureException;
 import springbook.issuetracker.sqlservice.UpdatableSqlRegistry;
 import springbook.user.sqlservice.SqlNotFoundException;
-import springbook.user.sqlservice.updatable.ConcurrentHashMapSqlRegistry;
 
 import java.util.HashMap;
 import java.util.Map;

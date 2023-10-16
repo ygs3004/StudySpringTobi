@@ -19,7 +19,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/springbook/learningtest/jdk/proxy/FactoryBeanTest-context.xml") // 설정파일 이름을 지정하지 않으면 클래스이름 + "-context.xml이 디폴트로 사용된다
+@ContextConfiguration(locations = "/springbook/learningtest/jdk/FactoryBeanTest-context.xml") // 설정파일 이름을 지정하지 않으면 클래스이름 + "-context.xml이 디폴트로 사용된다
 public class DynamicProxyTest {
 
     @Test

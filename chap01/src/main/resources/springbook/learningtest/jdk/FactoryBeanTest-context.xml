@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans.xsd
-                           http://www.springframework.org/schema/aop
-                           http://www.springframework.org/schema/aop/spring-aop.xsd">
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!--<bean id="connectionMaker" class="springbook.user.dao.DConnectionMaker"/>-->
 
@@ -20,7 +17,12 @@
         <property name="dataSource" ref="dataSource"/> <!-- ref="connectionMaker" -->
     </bean>
 
-    <bean id="userService" class="springbook.user.service.UserServiceImpl">
+<!--    <bean id="userService" class="springbook.user.service.before.UserServiceTx">-->
+<!--        <property name="transactionManager" ref="transactionManger"/>-->
+<!--        <property name="userService" ref="userServiceImpl" />-->
+<!--    </bean>-->
+
+    <bean id="userServiceImpl" class="springbook.user.service.UserServiceImpl">
         <property name="userDao" ref="userDao"/>
         <property name="mailSender" ref="mailSender"/>
     </bean>
@@ -35,19 +37,7 @@
         <property name="text" value="Factory Bean"/>
     </bean>
 
-    <bean id="transactionAdvice" class="springbook.user.service.before.TransactionAdvice">
-        <property name="transactionManager" ref="transactionManger"/>
-    </bean>
-
     <!-- 자동 프록시 생성기 -->
     <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
-
-    <!-- 테스트용 UserService -->
-    <bean id="testUserService" class="springbook.user.service.UserServiceTest$TestUserService" parent="userService" />
-
-    <aop:config>
-        <aop:pointcut id="transactionPointcut" expression="execution(* *..*ServiceImpl.upgrade*(..))"/>
-        <aop:advisor advice-ref="transactionAdvice" pointcut-ref="transactionPointcut"/> <!--DefaultPointcutAdvisor를 등록해준다.-->
-    </aop:config>
 
 </beans>
