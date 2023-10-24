@@ -32,7 +32,7 @@
         <property name="text" value="Factory Bean"/>
     </bean>
 
-    <bean id="transactionAdvice" class="springbook.user.service.before.TransactionAdvice">
+    <bean id="transactionAdvice" class="springbook.user.service.TransactionAdvice">
         <property name="transactionManager" ref="transactionManger"/>
     </bean>
 
