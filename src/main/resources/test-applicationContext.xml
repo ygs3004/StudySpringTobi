@@ -9,42 +9,13 @@
                            http://www.springframework.org/schema/jdbc
                            http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
-    <bean id="sqlService" class="springbook.user.sqlservice.OxmSqlService">
-        <property name="unmarshaller" ref="unmarshaller"/>
-        <property name="sqlRegistry" ref="sqlRegistry"/>
-    </bean>
-
-    <bean id="sqlRegistry" class="springbook.user.sqlservice.updatable.EmbeddedDbSqlRegistry">
-        <property name="dataSource" ref="embeddedDatabase"/>
-    </bean>
-
     <!-- HSQL 내장형 DB 설정 -->
-    <jdbc:embedded-database id="embeddedDatabase" type="HSQL">
+    <jdbc:embedded-database id="emTbeddedDatabase" type="HSQL">
         <jdbc:script location="classpath:springbook/user/sqlservice/updatable/sqlRegistrySchema.sql"/>
     </jdbc:embedded-database>
 
-    <bean id="unmarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
-        <property name="contextPath" value="springbook.user.sqlservice.jaxb"/>
-    </bean>
-
     <!-- AOP -->
     <tx:annotation-driven/> <!-- @Transactional 이 붙은 타입의 메소드에 트랜잭션 부가기능을 담은 프록시를 추가하도록 만들어주는 후처리기 등록 -->
-
-    <!-- Application Component -->
-    <bean id="userDao" class="springbook.user.dao.UserDaoJdbc">
-        <property name="dataSource" ref="dataSource"/> <!-- ref="connectionMaker" -->
-        <property name="sqlService" ref="sqlService"/>
-    </bean>
-
-    <bean id="userService" class="springbook.user.service.UserServiceImpl">
-        <property name="userDao" ref="userDao"/>
-        <property name="mailSender" ref="mailSender"/>
-    </bean>
-
-    <!-- 테스트용 UserService -->
-    <bean id="testUserService" class="springbook.user.service.UserServiceTest$TestUserService" parent="userService" />
-
-    <bean id="mailSender" class="springbook.user.service.DummyMailSender"/>
 
     <bean id="message" class="springbook.learningtest.jdk.MessageFactoryBean">
         <property name="text" value="Factory Bean"/>
