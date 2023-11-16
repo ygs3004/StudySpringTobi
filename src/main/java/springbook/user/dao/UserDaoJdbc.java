@@ -1,5 +1,6 @@
 package springbook.user.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import springbook.user.domain.Level;
@@ -13,14 +14,12 @@ import java.util.List;
 
 public class UserDaoJdbc implements UserDao{
 
+    @Autowired
     private SqlService sqlService;
-
-    public void setSqlService(SqlService sqlService) {
-        this.sqlService = sqlService;
-    }
 
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
     public void setDataSource(DataSource dataSource) { // 수정자 메소드이면서 JdbcTemplate에 대한 생성, DI 작업을 동시에 수행한다.
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
