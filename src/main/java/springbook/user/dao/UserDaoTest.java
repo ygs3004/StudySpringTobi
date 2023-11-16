@@ -24,7 +24,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(locations = "/test-applicationContext.xml")
 @ContextConfiguration(classes = TestApplicationContext.class)
 @DirtiesContext // 테스트 케이스마다 UserDaoTest객체를 새로 생성
 public class UserDaoTest {
@@ -39,9 +38,14 @@ public class UserDaoTest {
     DataSource dataSource;
 
     public static void main(String[] args) {
-        JUnitCore.main("springbook.user.dao.UserDaoTest", "springbook.user.service.UserServiceTest", "springbook.user.dao.UserTest",
-                "springbook.user.sqlservice.updatable.ConcurrentHashMapSqlRegistryTest", "springbook.learingtest..spring.embeddeddb.EmbeddedDbTest",
-                "spring.user.sqlservice.updatable.EmbeddedDbSqlRegistryTest");
+        JUnitCore.main(
+                "springbook.user.dao.UserDaoTest",
+//                "springbook.user.service.UserServiceTest",
+                "springbook.user.dao.UserTest",
+                "springbook.user.sqlservice.updatable.ConcurrentHashMapSqlRegistryTest",
+                "springbook.learningtest.spring.embeddeddb.EmbeddedDbTest",
+                "springbook.user.sqlservice.updatable.EmbeddedDbSqlRegistryTest"
+        );
     }
 
     @Before
@@ -49,11 +53,6 @@ public class UserDaoTest {
         this.user1 = new User("ygs3004", "윤건수", "비밀!", Level.BASIC, 1, 0, "ygs3004@naver.com");
         this.user2 = new User("winter", "겨울", "추워", Level.SILVER, 55, 10, "abc2@nave2r.com");
         this.user3 = new User("faker", "페이커", "1557", Level.GOLD, 100, 44, "abc3@nave2r.com");
-        /*
-        dao = new UserDao();
-        DataSource dataSource = new SingleConnectionDataSource("jdbc:oracle:thin:@localhost:1521:XE", "tobiTest", "tobi", true);
-        dao.setDataSource(dataSource);
-        */
     }
 
     @Test

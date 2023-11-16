@@ -1,15 +1,16 @@
 package springbook.context;
 
 import com.mysql.jdbc.Driver;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.mail.MailSender;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import springbook.user.dao.UserDao;
 import springbook.user.dao.UserDaoJdbc;
 import springbook.user.service.DummyMailSender;
@@ -21,11 +22,12 @@ import springbook.user.sqlservice.SqlRegistry;
 import springbook.user.sqlservice.SqlService;
 import springbook.user.sqlservice.updatable.EmbeddedDbSqlRegistry;
 
-import javax.annotation.Resource;
 import javax.sql.DataSource;
 
+import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.HSQL;
+
 @Configuration
-@ImportResource("/test-applicationContext.xml")
+@EnableTransactionManagement
 public class TestApplicationContext {
 
     @Bean
@@ -45,6 +47,16 @@ public class TestApplicationContext {
         DataSourceTransactionManager tm = new DataSourceTransactionManager();
         tm.setDataSource(dataSource());
         return tm;
+    }
+
+    @Bean
+    public DataSource embeddedDatabase(){
+        return new EmbeddedDatabaseBuilder()
+                .setName("embeddedDatabase")
+                .setType(HSQL)
+                .addScript(
+                        "classpath:springbook/user/sqlservice/updatable/sqlRegistrySchema.sql"
+                ).build();
     }
 
     @Bean
@@ -85,13 +97,10 @@ public class TestApplicationContext {
         return sqlService;
     }
 
-    @Resource
-    DataSource embeddedDatabase;
-
     @Bean
     public SqlRegistry sqlRegistry(){
         EmbeddedDbSqlRegistry sqlRegistry = new EmbeddedDbSqlRegistry();
-        sqlRegistry.setDataSource(this.embeddedDatabase);
+        sqlRegistry.setDataSource(embeddedDatabase());
         return sqlRegistry;
     }
 
