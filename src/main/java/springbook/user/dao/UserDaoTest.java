@@ -12,7 +12,8 @@ import org.springframework.jdbc.support.SQLExceptionTranslator;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import springbook.context.TestApplicationContext;
+import springbook.context.AppContext;
+import springbook.context.TestAppContext;
 import springbook.user.domain.Level;
 import springbook.user.domain.User;
 
@@ -24,7 +25,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestApplicationContext.class)
+@ContextConfiguration(classes = {TestAppContext.class, AppContext.class})
 @DirtiesContext // 테스트 케이스마다 UserDaoTest객체를 새로 생성
 public class UserDaoTest {
 
