@@ -25,7 +25,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {TestAppContext.class, AppContext.class})
+@ContextConfiguration(classes = AppContext.class)
 @DirtiesContext // 테스트 케이스마다 UserDaoTest객체를 새로 생성
 public class UserDaoTest {
 
