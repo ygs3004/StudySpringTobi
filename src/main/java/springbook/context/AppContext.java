@@ -28,6 +28,9 @@ public class AppContext {
     @Autowired
     UserDao userDao;
 
+    @Autowired
+    MailSender mailSender;
+
     @Bean
     public DataSource dataSource(){
         SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
@@ -49,23 +52,12 @@ public class AppContext {
 
     @Bean
     public UserService userService(){
-        UserServiceImpl service = new UserServiceImpl();
-        service.setUserDao(this.userDao);
-        service.setMailSender(mailSender());
-        return service;
+        return new UserServiceImpl();
     }
 
     @Bean
     public UserService testUserService(){
-        UserServiceTest.TestUserService testService = new UserServiceTest.TestUserService();
-        testService.setUserDao(this.userDao);
-        testService.setMailSender(mailSender());
-        return testService;
-    }
-
-    @Bean
-    public MailSender mailSender() {
-        return new DummyMailSender();
+        return new UserServiceTest.TestUserService();
     }
 
 }

@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.dao.TransientDataAccessResourceException;
 import org.springframework.mail.MailException;
@@ -15,11 +16,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 import springbook.context.AppContext;
-import springbook.context.TestAppContext;
 import springbook.user.dao.UserDao;
 import springbook.user.domain.Level;
 import springbook.user.domain.User;
-
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,6 +53,9 @@ public class UserServiceTest {
     @Autowired
     ApplicationContext context;
 
+    @Autowired
+    DefaultListableBeanFactory defaultListableBeanFactory;
+
     @Before
     public void setUp(){
         users = Arrays.asList(
@@ -63,6 +65,15 @@ public class UserServiceTest {
                 new User("dgumayusi", "구마", "p4", Level.SILVER, 60, MIN_RECOMMED_FOR_GOLD, "abc4@nav2er.com"),
                 new User("ezeus", "제우스", "p5", Level.GOLD, 100, Integer.MAX_VALUE, "abc5@nav2er.com")
         );
+    }
+
+    @Test
+    public void beans() {
+        for (String beanName : defaultListableBeanFactory.getBeanDefinitionNames()) {
+            System.out.println(beanName
+                    + " \t"
+                    + defaultListableBeanFactory.getBean(beanName).getClass().getName());
+        }
     }
 
     @Test
