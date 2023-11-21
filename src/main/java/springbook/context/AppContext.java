@@ -2,13 +2,11 @@ package springbook.context;
 
 import com.mysql.jdbc.Driver;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.mail.MailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import springbook.user.dao.UserDao;
@@ -22,14 +20,8 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(basePackages = "springbook.user")
-@Import({SqlServiceContext.class, TestAppContext.class, ProductionAppContext.class})
+@Import({SqlServiceContext.class, AppContext.TestAppContext.class, AppContext.ProductionAppContext.class})
 public class AppContext {
-
-    @Autowired
-    UserDao userDao;
-
-    @Autowired
-    MailSender mailSender;
 
     @Bean
     public DataSource dataSource(){
@@ -58,6 +50,35 @@ public class AppContext {
     @Bean
     public UserService testUserService(){
         return new UserServiceTest.TestUserService();
+    }
+
+    @Configuration
+    @Profile("test")
+    public static class TestAppContext {
+
+        @Bean
+        public UserService testUserService(){
+            return new UserServiceTest.TestUserService();
+        }
+
+        @Bean
+        public MailSender mailSender() {
+            return new DummyMailSender();
+        }
+
+    }
+
+    @Configuration
+    @Profile("production")
+    public static class ProductionAppContext {
+
+        @Bean
+        public MailSender mailSender(){
+            JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+            mailSender.setHost("localhost");
+            return mailSender;
+        }
+
     }
 
 }
