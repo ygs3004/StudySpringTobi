@@ -3,8 +3,14 @@ package springbook.learningtest.spring.ioc;
 import org.junit.Test;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
+import org.springframework.beans.factory.support.PropertiesBeanDefinitionReader;
 import org.springframework.beans.factory.support.RootBeanDefinition;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.context.support.StaticApplicationContext;
+import springbook.learningtest.spring.ioc.bean.Hello;
+import springbook.learningtest.spring.ioc.bean.StringPrinter;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
@@ -64,6 +70,28 @@ public class IocTest {
 
         Hello hello = ac.getBean("hello", Hello.class);
         hello.print();
+        assertThat(ac.getBean("printer").toString(), is("Hello Spring"));
+    }
+
+    @Test
+    public void genericApplicationContext(){
+        // XML 과 같은 외부 빈설정 메타정보를 읽는 context
+        // GenericApplicationContext ac = new GenericApplicationContext();
+        // XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(ac);
+        // reader.loadBeanDefinitions("springbook/learningtest/spring/ioc/genericApplicationContext.xml");
+
+        //  properties 파일을 이용할 경우
+        // PropertiesBeanDefinitionReader reader = new PropertiesBeanDefinitionReader(ac);
+        // reader.loadBeanDefinitions("springbook/learningtest/spring/ioc/genericApplicationContext.properties");
+
+        // ac.refresh();
+
+        // 메타정보 등록이후 컨테이너 초기화
+        GenericXmlApplicationContext ac = new GenericXmlApplicationContext("springbook/learningtest/spring/ioc/genericApplicationContext.xml");
+
+        Hello hello = ac.getBean("hello", Hello.class);
+        hello.print();
+
         assertThat(ac.getBean("printer").toString(), is("Hello Spring"));
     }
 
