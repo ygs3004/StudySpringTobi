@@ -7,18 +7,18 @@ import org.springframework.beans.factory.support.PropertiesBeanDefinitionReader;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.context.support.StaticApplicationContext;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
-import springbook.learningtest.spring.ioc.bean.Hello;
-import springbook.learningtest.spring.ioc.bean.Printer;
-import springbook.learningtest.spring.ioc.bean.StringPrinter;
+import springbook.learningtest.spring.ioc.bean.*;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.core.IsSame.sameInstance;
 import static org.junit.Assert.assertThat;
 
 public class IocTest {
@@ -120,4 +120,23 @@ public class IocTest {
         assertThat(printer.toString(), is("Hello Child"));
     }
 
+    @Test
+    public void simpleBeanScanning(){
+        ApplicationContext ctx = new AnnotationConfigApplicationContext("springbook.learningtest.spring.ioc.bean");
+        AnnotatedHello hello = ctx.getBean("annotatedHello", AnnotatedHello.class);
+
+        assertThat(hello, is(notNullValue()));
+    }
+
+    @Test
+    public void configruationTest(){
+        ApplicationContext ctx = new AnnotationConfigApplicationContext(AnnotatedHelloConfig.class);
+        AnnotatedHello hello = ctx.getBean("annotatedHello", AnnotatedHello.class);
+        assertThat(hello, is(notNullValue()));
+
+        AnnotatedHelloConfig config = ctx.getBean("annotatedHelloConfig", AnnotatedHelloConfig.class);
+        assertThat(config, is(notNullValue()));
+
+        assertThat(config.annotatedHello(), is(not(sameInstance(hello))));
+    }
 }
