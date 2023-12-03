@@ -14,7 +14,7 @@ public class Hello {
         this.printer.print(sayHello());
     }
 
-    @Value("Everyone ")
+    @Value("Everyone")
     public void setName(String name){
         this.name = name;
     }

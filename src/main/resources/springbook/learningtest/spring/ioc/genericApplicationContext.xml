@@ -1,12 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
     <bean id="hello" class="springbook.learningtest.spring.ioc.bean.Hello">
         <property name="name" value="Spring"/>
         <property name="printer" ref="printer"/>
     </bean>
 
     <bean id="printer" class="springbook.learningtest.spring.ioc.bean.StringPrinter"/>
+
+    <!-- PropertyEditor
+    직접 타입 변환기 등록, @Value, value 값의 타잎 변환시 사용-->
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <list>
+                <bean class="springbook.converter.MyTypeConverter" />
+            </list>
+        </property>
+    </bean>
+
+    <context:property-placeholder location="classpath:database.properties"/>
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="driverClass" value="${db.driverClass}"/>
+        <property name="url" value="${db.url}"/>
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+    </bean>
+
 </beans>
