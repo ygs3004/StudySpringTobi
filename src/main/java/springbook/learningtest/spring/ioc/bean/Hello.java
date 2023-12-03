@@ -1,7 +1,9 @@
 package springbook.learningtest.spring.ioc.bean;
 
+import org.springframework.beans.factory.annotation.Value;
+
 public class Hello {
-    String name;
+    String name = "Everyone";
     Printer printer;
 
     public String sayHello(){
@@ -12,6 +14,7 @@ public class Hello {
         this.printer.print(sayHello());
     }
 
+    @Value("Everyone ")
     public void setName(String name){
         this.name = name;
     }
