@@ -1,9 +1,9 @@
 package springbook.learningtest.spring.ioc;
 
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
-import org.springframework.beans.factory.support.PropertiesBeanDefinitionReader;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
@@ -14,6 +14,9 @@ import org.springframework.context.support.StaticApplicationContext;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 import springbook.learningtest.spring.ioc.bean.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
@@ -129,7 +132,7 @@ public class IocTest {
     }
 
     @Test
-    public void configruationTest(){
+    public void configurationTest(){
         ApplicationContext ctx = new AnnotationConfigApplicationContext(AnnotatedHelloConfig.class);
         AnnotatedHello hello = ctx.getBean("annotatedHello", AnnotatedHello.class);
         assertThat(hello, is(notNullValue()));
@@ -138,5 +141,28 @@ public class IocTest {
         assertThat(config, is(notNullValue()));
 
         assertThat(config.annotatedHello(), is(not(sameInstance(hello))));
+    }
+
+    @Test
+    public void singletonScope(){
+        ApplicationContext ac = new AnnotationConfigApplicationContext(
+                SingletonBean.class, SingletonBean.class
+        );
+
+        // Set: 중복값 제거
+        Set<SingletonBean> beans = new HashSet<>();
+        beans.add(ac.getBean(SingletonBean.class));
+        beans.add(ac.getBean(SingletonBean.class));
+
+        assertThat(beans.size(), is(1));
+
+    }
+
+    static class SingletonBean{}
+    static class SingletonClientBean{
+        @Autowired
+        SingletonBean bean1;
+        @Autowired
+        SingletonBean bean2;
     }
 }
