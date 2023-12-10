@@ -7,16 +7,18 @@ import springbook.learningtest.spring.ioc.dao.ServiceRequestDao;
 import springbook.learningtest.spring.ioc.dto.ServiceRequest;
 import springbook.learningtest.spring.ioc.factory.ServiceRequestFactory;
 
-public class ServiceRequestController {
+public abstract class ServiceRequestController {
 
     CustomerDao customerDao;
     ServiceRequestDao serviceRequestDao;
+
+    abstract public ServiceRequest getServiceRequest();
 
     @Autowired
     private ServiceRequestFactory serviceRequestFactory;
 
     public void serviceRequestFormSubmit(MockHttpServletRequest request){
-        ServiceRequest serviceRequest = this.serviceRequestFactory.getServiceFactory();
+        ServiceRequest serviceRequest = this.getServiceRequest();
         serviceRequest.setCustomerByCustomerNo(request.getParameter("custNo"));
         this.addNewServiceRequest(serviceRequest);
     }

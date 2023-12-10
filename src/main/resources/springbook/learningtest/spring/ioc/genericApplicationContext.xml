@@ -40,4 +40,8 @@
         <property name="serviceLocatorInterface" value="springbook.learningtest.spring.ioc.factory.ServiceRequestFactory"/>
     </bean>
 
+    <bean id="serviceRequestController" class="springbook.learningtest.spring.ioc.controller.ServiceRequestController">
+        <lookup-method name="getServiceRequest" bean="serviceRequest"/>
+    </bean>
+
 </beans>
