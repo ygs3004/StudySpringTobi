@@ -31,4 +31,13 @@
         <property name="password" value="#{dbprops['db.password']}"/>
     </bean>
 
+    <!-- XML을 용한 ObjectFactory Bean 등록
+    <bean id="serviceRequestFactory" class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
+        <property name="targetBeanName" value="serviceRequest"/>
+    </bean>-->
+
+    <bean class="org.springframework.beans.factory.config.ServiceLocatorFactoryBean">
+        <property name="serviceLocatorInterface" value="springbook.learningtest.spring.ioc.factory.ServiceRequestFactory"/>
+    </bean>
+
 </beans>

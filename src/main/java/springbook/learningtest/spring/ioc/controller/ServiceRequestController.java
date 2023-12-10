@@ -1,32 +1,29 @@
 package springbook.learningtest.spring.ioc.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.mock.web.MockHttpServletRequest;
 import springbook.learningtest.spring.ioc.dao.CustomerDao;
 import springbook.learningtest.spring.ioc.dao.ServiceRequestDao;
-import springbook.learningtest.spring.ioc.service.EmailService;
 import springbook.learningtest.spring.ioc.dto.ServiceRequest;
+
+import javax.annotation.Resource;
 
 public class ServiceRequestController {
 
     CustomerDao customerDao;
     ServiceRequestDao serviceRequestDao;
-    // EmailService emailService;
 
-    @Autowired
-    ApplicationContext context;
+    @Resource
+    private ObjectFactory<ServiceRequest> serviceRequestFactory;
 
     public void serviceRequestFormSubmit(MockHttpServletRequest request){
-        ServiceRequest serviceRequest = this.context.getBean(ServiceRequest.class);
+        ServiceRequest serviceRequest = this.serviceRequestFactory.getObject();
         serviceRequest.setCustomerByCustomerNo(request.getParameter("custNo"));
         this.addNewServiceRequest(serviceRequest);
     }
 
     public void addNewServiceRequest(ServiceRequest serviceRequest){
         this.serviceRequestDao.add(serviceRequest);
-        // this.emailService.sendEmail(serviceRequest.getCustomer().getEmail(), "A/S 접수가 정상적으로 처리되었습니다.");
-        // 구체적인 구현방법은 serviceRequest 객체에서 담당
         serviceRequest.notifyServiceRequestRegistration();
     }
 
