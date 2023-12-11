@@ -1,4 +1,4 @@
-package springbook.learningtest.spring.ioc.config;
+package springbook.config;
 
 import org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean;
 import org.springframework.context.annotation.Bean;

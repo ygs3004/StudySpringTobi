@@ -37,10 +37,10 @@
     </bean>-->
 
     <bean class="org.springframework.beans.factory.config.ServiceLocatorFactoryBean">
-        <property name="serviceLocatorInterface" value="springbook.learningtest.spring.ioc.factory.ServiceRequestFactory"/>
+        <property name="serviceLocatorInterface" value="springbook.factory.ServiceRequestFactory"/>
     </bean>
 
-    <bean id="serviceRequestController" class="springbook.learningtest.spring.ioc.controller.ServiceRequestController">
+    <bean id="serviceRequestController" class="springbook.controller.ServiceRequestController">
         <lookup-method name="getServiceRequest" bean="serviceRequest"/>
     </bean>
 

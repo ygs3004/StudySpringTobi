@@ -1,4 +1,4 @@
-package springbook.learningtest.spring.ioc.dto;
+package springbook.dto;
 
 public enum NotificationMethod {
     EMAIL(1);

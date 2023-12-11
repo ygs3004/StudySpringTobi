@@ -1,11 +1,10 @@
-package springbook.learningtest.spring.ioc.dto;
+package springbook.dto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import springbook.learningtest.spring.ioc.bean.Customer;
-import springbook.learningtest.spring.ioc.dao.CustomerDao;
-import springbook.learningtest.spring.ioc.service.EmailService;
+import springbook.dao.CustomerDao;
+import springbook.service.EmailService;
 
 @Component
 @Scope("prototype")

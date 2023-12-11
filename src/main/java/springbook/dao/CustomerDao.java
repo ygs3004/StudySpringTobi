@@ -1,6 +1,6 @@
-package springbook.learningtest.spring.ioc.dao;
+package springbook.dao;
 
-import springbook.learningtest.spring.ioc.bean.Customer;
+import springbook.dto.Customer;
 
 public class CustomerDao {
     public Customer findCustomerByNo(String customerNo) {

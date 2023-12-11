@@ -1,13 +1,11 @@
-package springbook.learningtest.spring.ioc.controller;
+package springbook.controller;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
-import springbook.learningtest.spring.ioc.dao.CustomerDao;
-import springbook.learningtest.spring.ioc.dao.ServiceRequestDao;
-import springbook.learningtest.spring.ioc.dto.ServiceRequest;
-import springbook.learningtest.spring.ioc.factory.ServiceRequestFactory;
+import springbook.dao.CustomerDao;
+import springbook.dao.ServiceRequestDao;
+import springbook.dto.ServiceRequest;
 
 public class ServiceRequestController {
 

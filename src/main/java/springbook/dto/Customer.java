@@ -1,6 +1,6 @@
-package springbook.learningtest.spring.ioc.bean;
+package springbook.dto;
 
-import springbook.learningtest.spring.ioc.dto.NotificationMethod;
+import springbook.dto.NotificationMethod;
 
 public class Customer {
 
