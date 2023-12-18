@@ -23,6 +23,6 @@ public class AnnotationTest {
         BeanB beanB;
     }
 
-    private  static class BeanB{
+    private static class BeanB{
     }
 }

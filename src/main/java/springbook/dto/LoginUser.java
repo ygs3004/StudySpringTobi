@@ -1,10 +1,11 @@
 package springbook.dto;
 
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 
 import java.util.Date;
 
-@Scope("session")
+@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class LoginUser {
 
     String longinId;
