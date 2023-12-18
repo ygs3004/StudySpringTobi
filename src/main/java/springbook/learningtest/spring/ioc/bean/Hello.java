@@ -2,6 +2,8 @@ package springbook.learningtest.spring.ioc.bean;
 
 import org.springframework.beans.factory.annotation.Value;
 
+import javax.annotation.PostConstruct;
+
 public class Hello {
     String name = "Everyone";
     Printer printer;
@@ -23,4 +25,8 @@ public class Hello {
         this.printer = printer;
     }
 
+    @PostConstruct
+    public void init(){
+        System.out.println("Init");
+    }
 }

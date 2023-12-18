@@ -1,5 +1,6 @@
 package springbook.controller;
 
+import com.sun.deploy.net.HttpRequest;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -17,7 +18,7 @@ public class ServiceRequestController {
 
     public void serviceRequestFormSubmit(MockHttpServletRequest request){
         ServiceRequest serviceRequest = this.serviceRequestProvider.get();
-        serviceRequest.setCustomerByCustomerNo(request.getParameter("custNo"));
+        // serviceRequest.setCustomerByCustomerNo(request.getParameter("custNo"));
         this.addNewServiceRequest(serviceRequest);
     }
 

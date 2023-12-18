@@ -9,13 +9,13 @@ import springbook.learningtest.spring.ioc.bean.StringPrinter;
 @Configuration
 public class HelloConfig {
 
-    @Bean
-    public Hello hello(){
-        Hello hello = new Hello();
-        hello.setName("Spring");
-        hello.setPrinter(printer());
-        return hello;
-    }
+    // @Bean
+    // public Hello hello(){
+    //     Hello hello = new Hello();
+    //     hello.setName("Spring");
+    //     hello.setPrinter(printer());
+    //     return hello;
+    // }
 
     @Bean
     public Hello hello2(){

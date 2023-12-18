@@ -10,13 +10,13 @@ public class HelloService {
         this.printer = printer;
     }
 
-    @Bean
-    public Hello hello(){
-        Hello hello = new Hello();
-        hello.setName("Spring");
-        hello.setPrinter(this.printer);
-        return hello;
-    }
+    // @Bean
+    // public Hello hello(){
+    //     Hello hello = new Hello();
+    //     hello.setName("Spring");
+    //     hello.setPrinter(this.printer);
+    //     return hello;
+    // }
 
     @Bean
     public Hello hello2(){

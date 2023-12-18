@@ -13,25 +13,25 @@ public class Config {
     @Value("${database.username}")
     private String name;
 
-    @Bean
-    public Hello hello(){
-        Hello hello = new Hello();
-        hello.setName(this.name);
-        return hello;
-    }
-    @Bean
-    public Hello hello(@Value("${database.username}") String name){
-        Hello hello = new Hello();
-        hello.setName(name);
-        return hello;
-    }
-
-    @Bean
-    public Hello hello(Printer printer){
-        Hello hello = new Hello();
-        hello.setPrinter(printer);
-        return hello;
-    }
+    // @Bean
+    // public Hello hello(){
+    //     Hello hello = new Hello();
+    //     hello.setName(this.name);
+    //     return hello;
+    // }
+    // @Bean
+    // public Hello hello(@Value("${database.username}") String name){
+    //     Hello hello = new Hello();
+    //     hello.setName(name);
+    //     return hello;
+    // }
+    //
+    // @Bean
+    // public Hello hello(Printer printer){
+    //     Hello hello = new Hello();
+    //     hello.setPrinter(printer);
+    //     return hello;
+    // }
 
     @Bean
     public Printer printer(){
