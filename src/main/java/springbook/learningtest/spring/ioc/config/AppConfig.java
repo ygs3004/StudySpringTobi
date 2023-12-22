@@ -1,8 +1,6 @@
 package springbook.learningtest.spring.ioc.config;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.*;
 import springbook.learningtest.spring.ioc.scanner.ServiceMaker;
 
 
@@ -12,4 +10,20 @@ import springbook.learningtest.spring.ioc.scanner.ServiceMaker;
 // @ComponentScan(basePackages = "myproject", excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = AppConfig.class))
 @ComponentScan(basePackageClasses = ServiceMaker.class)
 public class AppConfig {
+
+    @Configuration
+    @Profile("spring-test")
+    public static class SpringTestConfig{
+    }
+
+    @Configuration
+    @Profile("dev")
+    public static class DevConfig{
+    }
+
+    @Configuration
+    @Profile("production")
+    public static class ProductionConfig{
+    }
+
 }
