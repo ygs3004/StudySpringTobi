@@ -1,6 +1,5 @@
 package springbook.controller;
 
-import com.sun.deploy.net.HttpRequest;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 import org.springframework.mock.web.MockHttpServletRequest;

@@ -14,13 +14,13 @@
 
     <!-- PropertyEditor
     직접 타입 변환기 등록, @Value, value 값의 타잎 변환시 사용-->
-    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
-        <property name="converters">
-            <list>
-                <bean class="springbook.converter.MyTypeConverter" />
-            </list>
-        </property>
-    </bean>
+<!--    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">-->
+<!--        <property name="converters">-->
+<!--            <list>-->
+<!--                <bean class="springbook.converter.MyTypeConverter" />-->
+<!--            </list>-->
+<!--        </property>-->
+<!--    </bean>-->
 
     <util:properties id="dbprops" location="classpath:database.properties"/>
 
@@ -40,8 +40,8 @@
         <property name="serviceLocatorInterface" value="springbook.factory.ServiceRequestFactory"/>
     </bean>
 
-    <bean id="serviceRequestController" class="springbook.controller.ServiceRequestController">
-        <lookup-method name="getServiceRequest" bean="serviceRequest"/>
-    </bean>
+<!--    <bean id="serviceRequestController" class="springbook.controller.ServiceRequestController">-->
+<!--        <lookup-method name="getServiceRequest" bean="serviceRequest"/>-->
+<!--    </bean>-->
 
 </beans>

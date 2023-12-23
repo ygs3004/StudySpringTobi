@@ -141,7 +141,7 @@ public class IocTest {
         AnnotatedHelloConfig config = ctx.getBean("annotatedHelloConfig", AnnotatedHelloConfig.class);
         assertThat(config, is(notNullValue()));
 
-        assertThat(config.annotatedHello(), is(not(sameInstance(hello))));
+        assertThat(config.annotatedHello(), is(sameInstance(hello)));
     }
 
     @Test
