@@ -1,4 +1,4 @@
-package dataAccess;
+package dataAccess.jdbc;
 
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;

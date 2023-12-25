@@ -1,4 +1,4 @@
-package dataAccess;
+package dataAccess.jdbc;
 
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.mock.jndi.SimpleNamingContextBuilder;

@@ -1,4 +1,4 @@
-package springbook.config;
+package dataAccess.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @ComponentScan(basePackages = "dataAccess")
-public class ServiceConfig {
+public class DataAccessConfig {
 
     @Bean
     public DataSource dataSource() {
