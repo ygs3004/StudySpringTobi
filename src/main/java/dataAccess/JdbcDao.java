@@ -69,7 +69,7 @@ public class JdbcDao {
     @Test
     public void SimpleJdbcCallTest(){
         String id = "ygs3004";
-        SimpleJdbcCall call = new SimpleJdbcCall(dataSource).withFunctionName("find_name");
+        SimpleJdbcCall call = new SimpleJdbcCall(dataSource).withFunctionName("find_user");
         String ret = call.executeFunction(String.class, id);
         System.out.println(ret);
     }
