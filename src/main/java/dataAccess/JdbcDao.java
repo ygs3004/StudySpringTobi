@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -46,6 +47,7 @@ public class JdbcDao {
         }
     }
 
+    // SimpleJdbcInsert 를 이용하여 insert 하기
     @Test
     public void SimpleJdbcInsertTest(){
         SimpleJdbcInsert insert =
@@ -63,4 +65,12 @@ public class JdbcDao {
 
     }
 
+    // SimpleJdbcCall 을 이용한 프로시져, 펑션 호출
+    @Test
+    public void SimpleJdbcCallTest(){
+        String id = "ygs3004";
+        SimpleJdbcCall call = new SimpleJdbcCall(dataSource).withFunctionName("find_name");
+        String ret = call.executeFunction(String.class, id);
+        System.out.println(ret);
+    }
 }
