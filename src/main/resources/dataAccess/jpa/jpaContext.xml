@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="dataAccess"/>
+
+    <!-- Java SE, META-INF/persistence.xml 에 따라 생성 -->
+    <!--<bean id="emf" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean"/>-->
+
+    <!-- Java 5 서버가 제공하는 EntityManagerFactory -->
+    <!--<jee:jndi-lookup jndi-name="persistence/myPersistenceUnit"/>-->
+
+    <!-- Spring 이 관리하는 팩토리 빈 -->
+    <bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+
+        <!-- JPA 에서 실행된 실제 SQL 로깅(JPA 마다 다름) -->
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter">
+                <property name="showSql" value="true"/>
+            </bean>
+        </property>
+    </bean>
+
+</beans>
