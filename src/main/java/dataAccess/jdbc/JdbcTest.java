@@ -20,7 +20,6 @@ public class JdbcTest {
     @Autowired
     DataSource dataSource;
 
-
     // SimpleJdbcInsert 를 이용하여 insert 하기
     @Test
     public void SimpleJdbcInsertTest(){

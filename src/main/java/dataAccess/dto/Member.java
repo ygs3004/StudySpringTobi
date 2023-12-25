@@ -4,6 +4,6 @@ public class Member {
 
     int id;
     String name;
-    int point;
+    double point;
 
 }

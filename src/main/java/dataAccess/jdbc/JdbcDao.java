@@ -13,6 +13,9 @@ public class JdbcDao {
     SimpleJdbcTemplate simpleJdbcTemplate;
 
     @Autowired
+    DataSource dataSource;
+
+    @Autowired
     public void setDataSource(){
         this.simpleJdbcTemplate = new SimpleJdbcTemplate(dataSource);
     }
