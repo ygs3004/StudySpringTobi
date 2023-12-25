@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 
 import javax.sql.DataSource;
 
-public class MemberDao {
+public class MemberDao_Jdbc {
 
     private SimpleJdbcTemplate simpleJdbcTemplate;
     private SimpleJdbcInsert memberInsert;
