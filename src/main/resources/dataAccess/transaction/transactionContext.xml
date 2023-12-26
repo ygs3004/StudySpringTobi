@@ -27,11 +27,13 @@
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
-    <tx:annotation-driven transaction-manager="transactionManager" mode="proxy"/>
+    <!-- @Transactional 이용시 -->
+    <tx:annotation-driven/>
 
     <!-- 선언적 트랜잭션 어드바이스 -->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
+            <tx:method name="get*" read-only="true"/>
             <tx:method name="*"/>
         </tx:attributes>
     </tx:advice>
