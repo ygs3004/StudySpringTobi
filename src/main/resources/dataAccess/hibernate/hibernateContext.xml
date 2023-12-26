@@ -29,4 +29,9 @@
         </property>
     </bean>
 
+    <!-- 하이버네이트 트랜잭션 매니저 -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
 </beans>
