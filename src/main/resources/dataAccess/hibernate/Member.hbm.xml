@@ -3,9 +3,9 @@
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="dataAccess.hibernate">
-    <class name="dataAccess.jpa.Member" table="MEMBER">
-        <id name="id" column="ID" />
-        <property name="name" column="NAME" length="100" />
-        <property name="point" column="POINT" type="double" not-null="false"/>
+    <class name="dataAccess.jpa.Member" table="member">
+        <id name="id" column="id" />
+        <property name="name" column="name" length="100" />
+        <property name="point" column="point" type="double" not-null="false"/>
     </class>
 </hibernate-mapping>
