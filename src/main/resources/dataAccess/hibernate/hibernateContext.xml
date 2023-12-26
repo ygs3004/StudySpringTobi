@@ -6,7 +6,13 @@
 
     <context:component-scan base-package="dataAccess"/>
 
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="annotatedClasses">
+            <list>
+                <value>dataAccess.jpa.Member</value>
+            </list>
+        </property>
+
         <property name="dataSource" ref="dataSource"/>
         <property name="mappingLocations">
             <list>
