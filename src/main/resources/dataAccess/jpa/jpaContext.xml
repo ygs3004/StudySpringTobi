@@ -16,9 +16,18 @@
     <bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource"/>
 
+        <!-- persistence.xml 없이 JPA 사용 -->
+        <property name="packagesToScan" value="dataAccess.jpa"/>
+
+        <property name="jpaProperties">
+            <props>
+                <prop key="eclipselink.weaving">true</prop>
+            </props>
+        </property>
         <!-- JPA 에서 실행된 실제 SQL 로깅(JPA 마다 다름) -->
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter">
+                <property name="generateDdl" value="true"/>
                 <property name="showSql" value="true"/>
             </bean>
         </property>
