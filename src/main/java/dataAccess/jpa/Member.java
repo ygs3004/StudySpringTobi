@@ -16,6 +16,9 @@ public class Member {
     @Column(nullable = false)
     double point;
 
+    public Member() {
+    }
+
     public Member(int id, String name, int point) {
         this.id = id;
         this.name = name;
