@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <context:component-scan base-package="dataAccess"/>
+
+    <!-- 동일 dataSource 를 사용하는 경우 일반적 Dao 트랜잭션 설정-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- Jpa 의 경우 -->
+    <bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="emf"/>
+    </bean>
+
+    <!-- Hibernate 의 경우-->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+    </bean>
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+    <!-- @Transactional 이용시 -->
+    <tx:annotation-driven/>
+
+    <!-- 선언적 트랜잭션 어드바이스 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="get*" read-only="true"/>
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="txPointcut" expression="execution(* *..MemberDao.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
+    </aop:config>
+
+    <!-- 클래스에 proxy 적용-->
+    <tx:annotation-driven proxy-target-class="true"/>
+    <aop:config proxy-target-class="true">
+        <aop:pointcut id="txPointcut" expression="execution(* *..MemberDaoImpl.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
+    </aop:config>
+
+    <!-- JTA 트랜잭션 매니저 등록-->
+    <bean id="atomikosTransactionManager"
+          class="com.atomikos.icatch.jta.UserTransactionManager"
+          init-method="init" destroy-method="close">
+        <property name="forceShutdown"><value>true</value></property>
+    </bean>
+    <bean id="atomikosUserTransaction" class="com.atomikos.icatch.jta.UserTransactionImp">
+        <property name="transactionTimeout"><value>300</value></property>
+    </bean>
+    <bean id="transactionManager" class="org.springframework.transaction.jta.JtaTransactionManager">
+        <property name="transactionManager" ref="atomikosTransactionManager"/>
+        <property name="userTransaction" ref="atomikosUserTransaction" />
+    </bean>
+    <!-- XA DataSource 등록 -->
+    <bean id="dataSource1" class="com.atomikos.jdbc.AtomikosDataSourceBean"
+        init-method="init" destroy-method="close">
+        <property name="uniqueResourceName" value="MySQLXA1"/>
+        <property name="xaDataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlXADataSource"/>
+        <property name="xaProperties">
+            <props>
+                <prop key="user">jtauser</prop>
+                <prop key="password">jtapssword</prop>
+                <prop key="url">jdbc:mysql://localhost/tx1</prop>
+            </props>
+        </property>
+        <property name="poolSize" value="1" />
+    </bean>
+    <!--
+        <bean id="dataSource1" class="com.atomikos.jdbc.AtomikosDataSourceBean"
+        init-method="init" destroy-method="close">
+        <property name="uniqueResourceName" value="MySQLXA2"/>
+        ...
+        </bean>
+    -->
+
+</beans>

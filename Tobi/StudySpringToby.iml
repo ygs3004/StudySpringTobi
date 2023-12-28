@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="AdditionalModuleElements">
+    <content url="file://$MODULE_DIR$" dumb="true">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
+    </content>
+  </component>
+  <component name="FacetManager">
+    <facet type="hibernate" name="Hibernate">
+      <configuration>
+        <datasource-map>
+          <unit-entry name="META-INF:hibernate.cfg.xml" value="87c1a436-5fe8-4313-a46f-7117e37aecd3" />
+          <unit-entry name="dataAccess:hibernate:hibernate.cfg.xml" value="87c1a436-5fe8-4313-a46f-7117e37aecd3" />
+        </datasource-map>
+        <naming-strategy-map />
+        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/src/main/resources/dataAccess/hibernate/hibernate.cfg.xml" />
+      </configuration>
+    </facet>
+    <facet type="Spring" name="Spring">
+      <configuration>
+        <fileset id="fileset" name="TestApplicationContext" removed="false">
+          <file>file://$MODULE_DIR$/src/main/java/springbook/context/TestApplicationContext.java</file>
+        </fileset>
+      </configuration>
+    </facet>
+  </component>
+</module>

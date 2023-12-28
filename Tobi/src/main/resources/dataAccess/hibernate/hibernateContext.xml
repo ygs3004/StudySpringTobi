@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="dataAccess"/>
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="annotatedClasses">
+            <list>
+                <value>dataAccess.jpa.Member</value>
+            </list>
+        </property>
+
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mappingLocations">
+            <list>
+                <value>dataAccess/hibernate/Member.hbm.xml</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="cache.provider_class">org.hibernate.cache.NoCacheProvider</prop>
+                <prop key="show_sql">true</prop>
+                <prop key="hbm2ddl.auto">update</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- 하이버네이트 트랜잭션 매니저 -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+</beans>
