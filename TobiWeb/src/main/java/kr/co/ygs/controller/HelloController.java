@@ -19,7 +19,6 @@ public class HelloController implements Controller {
 
         String name = request.getParameter("name");
         String message = this.helloSpring.sayHello(name);
-        System.out.println(message);
 
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("message", message);

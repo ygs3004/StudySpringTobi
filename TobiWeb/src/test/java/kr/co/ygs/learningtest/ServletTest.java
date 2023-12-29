@@ -19,7 +19,7 @@ public class ServletTest {
     public void servletTest() throws ServletException, IOException {
 
         ConfigurableDispatcherServlet servlet = new ConfigurableDispatcherServlet();
-        servlet.setRelativeLocations(getClass(), "spring-servlet.xml");
+        servlet.setRelativeLocations(getClass(), "spring-servlet-test.xml");
         servlet.setClasses(HelloSpring.class);
 
         servlet.init(new MockServletConfig("spring"));

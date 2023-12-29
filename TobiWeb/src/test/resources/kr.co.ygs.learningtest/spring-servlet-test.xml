@@ -6,6 +6,9 @@
 
     <context:annotation-config/>
 
+    <!-- test HelloController for Autowire -->
+    <bean id="helloSpring" class="kr.co.ygs.HelloSpring"/>
+
     <bean name="/hello" class="kr.co.ygs.controller.HelloController"/>
 
 </beans>
