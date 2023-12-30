@@ -1,4 +1,4 @@
-package kr.co.ygs.learningtest;
+package kr.co.ygs.config;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -43,8 +43,7 @@ public class ConfigurableDispatcherServlet extends DispatcherServlet {
     // 주어진 클래스로부터 상대전인 위치에 있는 설정파일을 지정할수 있게한다.
     public void setRelativeLocations(Class<?> clazz, String ...relativeLocations){
         String[] locations = new String[relativeLocations.length];
-        // 책과는 다르게 "/" 경로일 경우 load 실패함... "." 로 변경하여 package 임을 나타내니 성공
-        String currentPath = ClassUtils.classPackageAsResourcePath(clazz).replace("/", ".") + "/";
+        String currentPath = ClassUtils.classPackageAsResourcePath(clazz) + "/";
 
         for(int i=0; i<relativeLocations.length; i++){
             locations[i] = currentPath + relativeLocations[i];
@@ -69,10 +68,6 @@ public class ConfigurableDispatcherServlet extends DispatcherServlet {
             protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws BeansException, IOException {
                 if (locations != null) {
                     XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(beanFactory);
-                    for(String location: locations){
-                        System.out.println(location);
-                    }
-
                     xmlReader.loadBeanDefinitions(locations);
                 }
 

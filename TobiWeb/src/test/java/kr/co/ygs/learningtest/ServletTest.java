@@ -1,6 +1,7 @@
 package kr.co.ygs.learningtest;
 
 import kr.co.ygs.HelloSpring;
+import kr.co.ygs.config.ConfigurableDispatcherServlet;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;

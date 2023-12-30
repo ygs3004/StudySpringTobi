@@ -14,7 +14,7 @@ public class HelloControllerTest {
 
     @Test
     public void helloControllerTest() throws Exception {
-        ApplicationContext ac = new GenericXmlApplicationContext("kr.co.ygs.learningtest/spring-servlet-test.xml");
+        ApplicationContext ac = new GenericXmlApplicationContext("kr/co/ygs/learningtest/spring-servlet-test.xml");
         HelloController helloController = ac.getBean(HelloController.class);
 
         MockHttpServletRequest request = new MockHttpServletRequest("GET", "/hello");
