@@ -1,7 +1,6 @@
 package kr.co.ygs.config;
 
 import org.junit.After;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
