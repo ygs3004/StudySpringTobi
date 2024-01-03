@@ -16,7 +16,7 @@ public class SimpleHelloControllerTest {
         params.put("name", "Spring");
         Map<String, Object> model = new HashMap<String, Object>();
 
-        new SimpleHelloController().control(params, model);
+        new AbstractSimpleHelloControllerImpl().control(params, model);
 
         assertThat((String)model.get("message"), is("Hello Spring"));
     }

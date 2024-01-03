@@ -5,7 +5,6 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotatedBeanDefinitionReader;
-import org.springframework.context.support.AbstractRefreshableApplicationContext;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AbstractRefreshableWebApplicationContext;
@@ -56,11 +55,13 @@ public class ConfigurableDispatcherServlet extends DispatcherServlet {
         this.classes = classes;
     }
 
+    @Override
     public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException {
         modelAndView = null;
         super.service(request, response);
     }
 
+    @Override
     // DispatcherServlet 의 컨텍스트를 생성하는 메서드를 오버라이드, 테스트용 메타정보를 이용하여 서블릿 컨텍스트 생성
     protected WebApplicationContext createWebApplicationContext(ApplicationContext parent){
         AbstractRefreshableWebApplicationContext wac = new AbstractRefreshableWebApplicationContext() {
@@ -85,6 +86,7 @@ public class ConfigurableDispatcherServlet extends DispatcherServlet {
         return wac;
     }
 
+    @Override
     public void render(ModelAndView mv, HttpServletRequest request, HttpServletResponse response) throws Exception {
         this.modelAndView = mv;
         super.render(mv, request, response);

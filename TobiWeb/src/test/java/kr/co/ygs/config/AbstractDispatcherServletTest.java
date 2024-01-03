@@ -98,6 +98,7 @@ public class AbstractDispatcherServletTest implements AfterRunService {
         if(this.dispatcherServlet == null) buildDispatcherServlet();
         if(this.request == null) throw new IllegalStateException(("request가 준비되지 않았습니다."));
         this.dispatcherServlet.service(this.request, this.response);
+
         return this;
     }
 
@@ -141,9 +142,7 @@ public class AbstractDispatcherServletTest implements AfterRunService {
     public void closeServletContext(){
         if(this.dispatcherServlet != null){
             ((ConfigurableApplicationContext) dispatcherServlet.getWebApplicationContext()).close();
-
         }
     }
-
 
 }

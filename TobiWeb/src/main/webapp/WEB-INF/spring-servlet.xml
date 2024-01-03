@@ -8,4 +8,14 @@
 
     <bean name="/hello" class="kr.co.ygs.controller.HelloController"/>
 
+    <!-- Interceptor Bean Example -->
+    <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">
+        <property name="interceptors">
+            <list>
+                <ref bean="simpleInterceptor"/>
+            </list>
+        </property>
+    </bean>
+    <bean id="simpleInterceptor"/>
+
 </beans>

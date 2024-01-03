@@ -2,9 +2,9 @@ package kr.co.ygs.controller;
 
 import java.util.Map;
 
-public class SimpleHelloController extends SimpleController{
+public class AbstractSimpleHelloControllerImpl extends AbstractSimpleController {
 
-    public SimpleHelloController(){
+    public AbstractSimpleHelloControllerImpl(){
         this.setRequiredParams(new String[] {"name"});
         this.setViewName("/WEB-INF/view/hello.jsp");
     }
